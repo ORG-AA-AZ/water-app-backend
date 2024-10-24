@@ -20,13 +20,14 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: PHP-CS-Fixer
-        env:
-          FIXER_VERSION: 3.64.0
-          PHP_VERSION: 8.3
+      - name: Check for PHP-CS-Fixer image 
+        run: |
+          docker pull ghcr.io/php-cs-fixer/php-cs-fixer:3.64.0-php8.3
+      - name: Run PHP-CS-Fixer
         run: |
           docker run --rm \
             -v $(pwd):/code \
-            ghcr.io/php-cs-fixer/php-cs-fixer:${FIXER_VERSION}-php${PHP_VERSION} \
+            ghcr.io/php-cs-fixer/php-cs-fixer:3.64.0-php8.3 \
             fix
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
