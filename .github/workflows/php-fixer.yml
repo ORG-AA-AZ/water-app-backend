@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for PHP-CS-Fixer image
         run: |
-          docker pull ghcr.io/php-cs-fixer/php-cs-fixer:${{ env.FIXER_VERSION }}-php${{ env.PHP_VERSION }}
+          docker pull ghcr.io/php-cs-fixer/php-cs-fixer:3.64.0-php8.3
       - name: PHP-CS-Fixer
         env:
           FIXER_VERSION: 3.64.0
