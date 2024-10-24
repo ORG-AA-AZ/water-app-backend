@@ -36,41 +36,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          tools: composer:v2
+          coverage: pcov
+
+      - name: Install PHP Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
         
-      - name: Set up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      - name: Check Laravel Sail Runtimes
-        run: |
-          ls -al /home/runner/work/water-app-backend/water-app-backend/vendor/laravel/sail/runtimes
-
-      - name: Start Docker Compose
-        run: |
-          export WWWUSER=1000
-          export WWWGROUP=1000
-          docker-compose up -d
-
-      - name: Wait for MySQL to be ready
-        run: timeout 60s bash -c 'until docker exec -i mysql mysqladmin ping -h"127.0.0.1" --silent; do sleep 1; done'
-
-      - name: Install Project Dependencies
-        run: docker exec -i laravel.test composer install --no-interaction --prefer-dist --optimize-autoloader
-
       - name: Prepare Application
         run: |
-          docker exec -i laravel.test bash -c "
-            cp .env.example .env &&
-            php artisan key:generate &&
-            php artisan migrate --seed
-          "
+          cp .env.example .env
+          php artisan key:generate
+          php artisan storage:link
+          php artisan migrate --seed
 
-      - name: Run PHPUnit Tests
-        run: docker exec -i laravel.test php artisan test --parallel --coverage-clover=coverage.xml
-
-      - name: Upload Coverage to GitHub
-        uses: codecov/codecov-action@v4
+      - name: PHPUnit
+        run: php artisan test --parallel --coverage-clover=coverage.xml --passthru-php="'-d' 'pcov.enabled=1' '-d' 'pcov.directory=.' '-d' 'pcov.exclude=~vendor~'"
+      - uses: codecov/codecov-action@v4
         with:
-          token: ${{ secrets.YOUR_PAT }}
-          files: coverage.xml
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./coverage.xml
