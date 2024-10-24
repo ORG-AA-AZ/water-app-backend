@@ -18,6 +18,8 @@ jobs:
       DB_DATABASE: '${{ secrets.DB_DATABASE }}'
       DB_USERNAME: '${{ secrets.DB_USERNAME }}'
       DB_PASSWORD: '${{ secrets.DB_PASSWORD }}'
+      WWWUSER: ${WWWUSER}
+      WWWGROUP: ${WWWGROUP}
     services:
       mysql:
         image: mysql:8.0
@@ -41,6 +43,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
+
+      - name: Check Laravel Sail Runtimes
+        run: |
+          ls -al /home/runner/work/water-app-backend/water-app-backend/vendor/laravel/sail/runtimes
 
       - name: Start Docker Compose
         run: |
