@@ -36,6 +36,20 @@ jobs:
           --health-retries=5
 
     steps:
+      - name: Wait for MySQL to be ready
+        run: |
+            for i in {1..10}; do
+              if mysqladmin ping -h"127.0.0.1" --silent; then
+                echo "MySQL is ready!"
+                exit 0
+              fi
+              echo "Waiting for MySQL..."
+              sleep 5
+            done
+            echo "MySQL failed to start in time."
+            # Get MySQL logs for debugging
+            docker logs $(docker ps -aqf "name=mysql")
+            exit 1
       - name: Checkout code
         uses: actions/checkout@v4
 
