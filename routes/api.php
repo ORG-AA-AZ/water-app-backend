@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 // Public Routes For User
 Route::post('/auth/user-register', [UserController::class, 'registerUser']);
-Route::post('/auth/user-reset-password', [UserController::class, 'resetUserPassword']);
 Route::post('/auth/user-forget-password', [UserController::class, 'forgetUserPassword']);
 Route::post('/auth/user-verify-mobile', [UserController::class, 'verifyMobile']);
 Route::post('/auth/user-resend-verify-code', [UserController::class, 'resendVerificationCode']);
@@ -25,8 +24,9 @@ Route::post('/auth/marketplace-login', [MarketplaceController::class, 'loginMark
 Route::middleware('auth:sanctum')->group(function () {
     // Routes available to authenticated users
     Route::get('/marketplaces', [MarketplaceController::class, 'index']);
-
+    
     Route::middleware([EnsureMobileIsVerified::class])->group(function () {
+        Route::post('/auth/user-reset-password', [UserController::class, 'resetUserPassword']);
         Route::delete('/auth/user-logout', [UserController::class, 'logoutUser']);
         Route::delete('/auth/marketplace-logout', [MarketplaceController::class, 'logoutMarketplace']);
     });

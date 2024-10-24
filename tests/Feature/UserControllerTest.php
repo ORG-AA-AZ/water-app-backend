@@ -172,6 +172,7 @@ class UserControllerTest extends TestCase
 
     public function testLoginUser(): void
     {
+        dd();
         $user = UserFactory::new()->verified()->createOne();
 
         $data = [
