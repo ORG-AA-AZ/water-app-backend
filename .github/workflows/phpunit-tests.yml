@@ -16,9 +16,9 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: '${DB_DATABASE}'
-          MYSQL_USER: '${DB_USERNAME}'
-          MYSQL_PASSWORD: '${DB_PASSWORD}'
+          MYSQL_DATABASE: '${{ secrets.DB_DATABASE }}'
+          MYSQL_USER: '${{ secrets.DB_USERNAME }}'
+          MYSQL_PASSWORD: '${{ secrets.DB_PASSWORD }}'
         ports:
           - '3306:3306'
         options:
@@ -36,7 +36,10 @@ jobs:
           sudo apt-get install -y docker-compose
 
       - name: Start Docker Compose
-        run: docker-compose up -d
+        run: |
+          export WWWUSER=${{ secrets.WWWUSER }}
+          export WWWGROUP=${{ secrets.WWWGROUP }}
+          docker-compose up -d
 
       - name: Wait for MySQL to be ready
         run: timeout 60s bash -c 'until docker exec -i mysql mysqladmin ping -h"127.0.0.1" --silent; do sleep 1; done'
