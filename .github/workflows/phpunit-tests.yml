@@ -1,0 +1,52 @@
+name: Run PHPUnit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  run-phpunit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: '${DB_DATABASE}'
+          MYSQL_USER: '${DB_USERNAME}'
+          MYSQL_PASSWORD: '${DB_PASSWORD}'
+        ports:
+          - '3306:3306'
+        options:
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Docker
+        run: |
+          docker-compose up -d
+          # Wait for MySQL to be ready
+          timeout 60s bash -c 'until docker exec -i mysql mysqladmin ping -h"127.0.0.1" --silent; do sleep 1; done'
+      - name: Install Project Dependencies
+        run: docker exec -i laravel.test composer install --no-interaction --prefer-dist --optimize-autoloader
+      - name: Prepare Application
+        run: |
+          docker exec -i laravel.test bash -c "
+            cp .env.example .env &&
+            php artisan key:generate &&
+            php artisan migrate --seed
+          "
+      - name: Run PHPUnit Tests
+        run: docker exec -i laravel.test php artisan test --parallel --coverage-clover=coverage.xml
+      - name: Upload Coverage to GitHub
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.YOUR_PAT }}
+          files: coverage.xml
