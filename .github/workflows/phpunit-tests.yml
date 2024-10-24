@@ -22,14 +22,13 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0
+        image: 'mysql:5.7'
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: laravel
-          MYSQL_USER: sail
-          MYSQL_PASSWORD: password
+            MYSQL_DATABASE: mysql
+            MYSQL_USER: mysql
+            MYSQL_PASSWORD: test
         ports:
-          - '3306:3306'
+          - 3306:3306
         options:
           --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
