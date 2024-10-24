@@ -10,7 +10,7 @@ on:
 
 jobs:
   run-phpunit-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     env:
       DB_CONNECTION: mysql
@@ -22,9 +22,8 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: laravel
           MYSQL_USER: sail
           MYSQL_PASSWORD: password
@@ -56,7 +55,7 @@ jobs:
           php artisan key:generate
           php artisan storage:link
           timeout 60s bash -c 'until mysqladmin ping -h"127.0.0.1" --silent; do sleep 1; done'
-          php artisan migrate --seed
+          php artisan mi:f --seed
 
       - name: PHPUnit
         run: php artisan test --parallel --coverage-clover=coverage.xml --passthru-php="'-d' 'pcov.enabled=1' '-d' 'pcov.directory=.' '-d' 'pcov.exclude=~vendor~'"
