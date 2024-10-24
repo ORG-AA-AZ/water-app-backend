@@ -29,7 +29,7 @@ jobs:
         run: |
           docker run --rm \
             -v $(pwd):/code \
-            ghcr.io/php-cs-fixer/php-cs-fixer:${FIXER_VERSION}-php${PHP_VERSION} \
+            ghcr.io/php-cs-fixer/php-cs-fixer:3.64.0-php8.3 \
             fix
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
