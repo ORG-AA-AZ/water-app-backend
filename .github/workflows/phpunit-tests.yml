@@ -50,18 +50,12 @@ jobs:
       - name: Install PHP Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Wait for MySQL
-        run: |
-          while ! mysqladmin ping -h "mysql" --silent; do
-            echo "Waiting for MySQL to be ready..."
-            sleep 2
-          done
-
       - name: Prepare Application
         run: |
           cp .env.example .env
           php artisan key:generate
           php artisan storage:link
+          timeout 60s bash -c 'until mysqladmin ping -h"127.0.0.1" --silent; do sleep 1; done'
           php artisan migrate --seed
 
       - name: PHPUnit
