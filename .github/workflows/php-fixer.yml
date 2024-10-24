@@ -15,15 +15,14 @@ jobs:
   php-cs-fixer:
     name: PHP-CS-Fixer
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: PHP-CS-Fixer
-      - name: Check for PHP-CS-Fixer image 
-        run: |
-          docker pull ghcr.io/php-cs-fixer/php-cs-fixer:3.64.0-php8.3
-      - name: Run PHP-CS-Fixer
+        env:
+          FIXER_VERSION: 3.64.0
+          PHP_VERSION: 8.3
         run: |
           docker run --rm \
             -v $(pwd):/code \
