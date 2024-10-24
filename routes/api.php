@@ -24,7 +24,7 @@ Route::post('/auth/marketplace-login', [MarketplaceController::class, 'loginMark
 Route::middleware('auth:sanctum')->group(function () {
     // Routes available to authenticated users
     Route::get('/marketplaces', [MarketplaceController::class, 'index']);
-    
+
     Route::middleware([EnsureMobileIsVerified::class])->group(function () {
         Route::post('/auth/user-reset-password', [UserController::class, 'resetUserPassword']);
         Route::delete('/auth/user-logout', [UserController::class, 'logoutUser']);
