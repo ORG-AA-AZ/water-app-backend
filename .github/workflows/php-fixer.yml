@@ -19,6 +19,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check for PHP-CS-Fixer image
+        run: |
+          docker pull ghcr.io/php-cs-fixer/php-cs-fixer:${{ env.FIXER_VERSION }}-php${{ env.PHP_VERSION }}
       - name: PHP-CS-Fixer
         env:
           FIXER_VERSION: 3.64.0
