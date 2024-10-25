@@ -7,7 +7,7 @@ use App\Http\Controllers\BaseAuthController;
 use App\Http\Controllers\Services\Location;
 use App\Http\Controllers\Services\LoginAndRegisterService;
 use App\Http\Controllers\Services\VerifyMobileNumber;
-use App\Http\Requests\ChangeLocationRequest;
+use App\Http\Requests\SetLocationRequest;
 use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\NewVerifyCodeRequest;
@@ -28,6 +28,8 @@ class MarketplaceController extends BaseAuthController
     {
         $data = [
             'national_id' => $request->input('national_id'),
+            'latitude' => $request->input('latitude'),
+            'longitude' => $request->input('longitude'),
         ];
 
         return parent::register(ModelsEnum::Marketplace, $request, $data);
@@ -63,8 +65,8 @@ class MarketplaceController extends BaseAuthController
         return $this->verify_mobile_number->setNewVerificationCode(ModelsEnum::Marketplace, $request);
     }
 
-    public function changeLocation(ChangeLocationRequest $request): void
+    public function setLocation(SetLocationRequest $request): void
     {
-        $this->location->changeLocation(ModelsEnum::Marketplace, $request);
+        $this->location->setLocation(ModelsEnum::Marketplace, $request);
     }
 }

@@ -44,7 +44,7 @@ class MarketplaceControllerTest extends TestCase
             ->assertStatus(201)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Account registered successfully. Verify your mobile number',
+                'message' => __('messages.mobile_registered_successfully'),
             ]);
 
         $this->assertDatabaseHas('marketplaces', [
@@ -100,9 +100,9 @@ class MarketplaceControllerTest extends TestCase
         $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(422)
             ->assertJson([
-                'message' => 'The national ID has already been taken.',
+                'message' => __('validation.unique', ['attribute' => 'national ID']),
                 'errors' => [
-                    'national_id' => ['The national ID has already been taken.'],
+                    'national_id' => [__('validation.unique', ['attribute' => 'national ID'])],
                 ],
             ]);
     }
@@ -124,9 +124,9 @@ class MarketplaceControllerTest extends TestCase
         $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(422)
             ->assertJson([
-                'message' => 'The mobile number has already been taken.',
+                'message' => __('validation.unique', ['attribute' => 'mobile number']),
                 'errors' => [
-                    'mobile' => ['The mobile number has already been taken.'],
+                    'mobile' => [__('validation.unique', ['attribute' => 'mobile number'])],
                 ],
             ]);
     }
@@ -142,7 +142,7 @@ class MarketplaceControllerTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Logged out successfully.',
+                'message' => __('messages.logout'),
             ]);
 
         $this->assertCount(0, $marketplace->tokens);

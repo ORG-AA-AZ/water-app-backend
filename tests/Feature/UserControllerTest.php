@@ -44,22 +44,18 @@ class UserControllerTest extends TestCase
             'mobile' => $mobile = (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
             'password' => $password = Str::random(),
             'password_confirmation' => $password,
-            'latitude' => $latitude = $this->faker->latitude(),
-            'longitude' => $longitude = $this->faker->longitude(),
         ];
 
         $this->postJson('/api/user/register', $data)
             ->assertStatus(201)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Account registered successfully. Verify your mobile number',
+                'message' => __('messages.mobile_registered_successfully'),
             ]);
 
         $this->assertDatabaseHas('users', [
             'name' => $name,
             'mobile' => $mobile,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
         ]);
 
         $user = User::where('mobile', $mobile)->first();
@@ -79,16 +75,14 @@ class UserControllerTest extends TestCase
             'mobile' => $user->mobile,
             'password' => $password = Str::random(),
             'password_confirmation' => $password,
-            'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),
         ];
 
         $this->postJson('/api/user/register', $data)
             ->assertStatus(422)
             ->assertJson([
-                'message' => 'The mobile number has already been taken.',
+                'message' => __('validation.unique', ['attribute' => 'mobile number']),
                 'errors' => [
-                    'mobile' => ['The mobile number has already been taken.'],
+                    'mobile' => [__('validation.unique', ['attribute' => 'mobile number'])],
                 ],
             ]);
     }
@@ -102,8 +96,6 @@ class UserControllerTest extends TestCase
             'mobile' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
             'password' => Str::random(),
             'password_confirmation' => Str::random(),
-            'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),
         ];
 
         $this->postJson('/api/user/register', $data)
@@ -112,32 +104,6 @@ class UserControllerTest extends TestCase
                 'message' => 'The password confirmation does not match.',
                 'errors' => [
                     'password' => ['The password confirmation does not match.'],
-                ],
-            ]);
-    }
-
-    public function testFailRegisterUserIfOneOfLatitudeOrLongitude(): void
-    {
-        $this->faker = Factory::create();
-
-        $data = [
-            'name' => $this->faker->name(),
-            'mobile' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
-            'password' => $password = Str::random(),
-            'password_confirmation' => $password,
-        ];
-
-        $this->postJson('/api/user/register', $data)
-            ->assertStatus(422)
-            ->assertJson([
-                'message' => 'The latitude field is required. (and 1 more error)',
-                'errors' => [
-                    'latitude' => [
-                        'The latitude field is required.',
-                    ],
-                    'longitude' => [
-                        'The longitude field is required.',
-                    ],
                 ],
             ]);
     }
@@ -151,8 +117,6 @@ class UserControllerTest extends TestCase
             'mobile' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
             'password' => $password = Str::random(),
             'password_confirmation' => $password,
-            'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),
         ];
 
         $mocked_service = $this->createMock(LoginAndRegisterService::class);
@@ -227,7 +191,7 @@ class UserControllerTest extends TestCase
             ->assertStatus(401)
             ->assertJson([
                 'status' => 'error',
-                'message' => 'Invalid login credentials',
+                'message' => __('messages.invalid_login'),
             ]);
     }
 
@@ -244,7 +208,7 @@ class UserControllerTest extends TestCase
             ->assertStatus(401)
             ->assertJson([
                 'status' => 'error',
-                'message' => 'Your mobile number is not verified',
+                'message' => __('messages.mobile_not_verified'),
             ]);
     }
 
@@ -262,7 +226,7 @@ class UserControllerTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Mobile number verified successfully',
+                'message' => __('messages.mobile_verified_successfully'),
             ]);
     }
 
@@ -279,7 +243,7 @@ class UserControllerTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'New verification code sent successfully.',
+                'message' => __('messages.new_verification_code_sent'),
             ]);
     }
 
@@ -292,7 +256,7 @@ class UserControllerTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Logged out successfully.',
+                'message' => __('messages.logout'),
             ]);
 
         $this->assertCount(0, $user->tokens);
@@ -307,7 +271,7 @@ class UserControllerTest extends TestCase
             ]);
     }
 
-    public function testUpdateUserLocation(): void
+    public function testSetUserLocation(): void
     {
         $this->faker = Factory::create();
         $user = UserFactory::new()->verified()->createOne();
@@ -322,8 +286,8 @@ class UserControllerTest extends TestCase
         $this->assertNotEquals($user->longitude, $data['longitude']);
 
         $this->actingAs($user)
-            ->postJson('api/user/update-location', $data)
+            ->postJson('api/user/set-location', $data)
             ->assertOk()
-            ->assertJson(['message' => 'Your location is updated successfully']);
+            ->assertJson(['message' => __('messages.location_located')]);
     }
 }

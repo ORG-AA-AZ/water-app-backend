@@ -26,13 +26,13 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'mobile' => (string) fake()->numberBetween(1000000000, 9999999999),
-            'mobile_verification_code' => Str::random(6),
+            'mobile_verification_code' => (string) fake()->numberBetween(100000, 999999),
             'mobile_verified_at' => null,
             'password' => static::$password ??= Hash::make('password'),
             'reset_password' => null,
             'remember_token' => Str::random(10),
-            'latitude' => fake()->latitude(),
-            'longitude' => fake()->longitude(),
+            'latitude' => null,
+            'longitude' => null,
         ];
     }
 

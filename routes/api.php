@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Marketplace\MarketplaceController;
+use App\Http\Controllers\Services\SetLanguage;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\EnsureMobileIsVerified;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/set-language', [SetLanguage::class, 'setLanguage']);
 
 // Public Routes for User with 'user' prefix
 Route::prefix('user')->group(function () {
@@ -32,7 +35,7 @@ Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(functi
     Route::prefix('user')->group(function () {
         Route::post('reset-password', [UserController::class, 'resetUserPassword']);
         Route::delete('logout', [UserController::class, 'logoutUser']);
-        Route::post('update-location', [UserController::class, 'updateLocation']);
+        Route::post('set-location', [UserController::class, 'setLocation']);
     });
 
     // Marketplace Routes with 'marketplace' prefix
