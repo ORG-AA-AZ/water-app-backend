@@ -48,7 +48,7 @@ class UserControllerTest extends TestCase
             'longitude' => $longitude = $this->faker->longitude(),
         ];
 
-        $this->postJson('/api/auth/user-register', $data)
+        $this->postJson('/api/user/register', $data)
             ->assertStatus(201)
             ->assertJson([
                 'status' => 'success',
@@ -83,7 +83,7 @@ class UserControllerTest extends TestCase
             'longitude' => $this->faker->longitude(),
         ];
 
-        $this->postJson('/api/auth/user-register', $data)
+        $this->postJson('/api/user/register', $data)
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The mobile number has already been taken.',
@@ -106,7 +106,7 @@ class UserControllerTest extends TestCase
             'longitude' => $this->faker->longitude(),
         ];
 
-        $this->postJson('/api/auth/user-register', $data)
+        $this->postJson('/api/user/register', $data)
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The password confirmation does not match.',
@@ -127,7 +127,7 @@ class UserControllerTest extends TestCase
             'password_confirmation' => $password,
         ];
 
-        $this->postJson('/api/auth/user-register', $data)
+        $this->postJson('/api/user/register', $data)
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The latitude field is required. (and 1 more error)',
@@ -162,7 +162,7 @@ class UserControllerTest extends TestCase
 
         $this->app->instance(LoginAndRegisterService::class, $mocked_service);
 
-        $this->postJson('/api/auth/user-register', $data)
+        $this->postJson('/api/user/register', $data)
             ->assertStatus(401)
             ->assertJson([
                 'status' => 'error',
@@ -179,7 +179,7 @@ class UserControllerTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson('/api/auth/user-login', $data)
+        $this->postJson('/api/user/login', $data)
             ->assertOk()
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -201,7 +201,7 @@ class UserControllerTest extends TestCase
             'password' => 'reset_password',
         ];
 
-        $this->postJson('/api/auth/user-login', $data)
+        $this->postJson('/api/user/login', $data)
             ->assertOk()
             ->assertStatus(200)
             ->assertJsonStructure([
@@ -223,7 +223,7 @@ class UserControllerTest extends TestCase
             'password' => Str::random(8),
         ];
 
-        $this->postJson('/api/auth/user-login', $data)
+        $this->postJson('/api/user/login', $data)
             ->assertStatus(401)
             ->assertJson([
                 'status' => 'error',
@@ -240,7 +240,7 @@ class UserControllerTest extends TestCase
             'password' => 'password',
         ];
 
-        $this->postJson('/api/auth/user-login', $data)
+        $this->postJson('/api/user/login', $data)
             ->assertStatus(401)
             ->assertJson([
                 'status' => 'error',
@@ -257,7 +257,7 @@ class UserControllerTest extends TestCase
             'code' => $user->mobile_verification_code,
         ];
 
-        $this->postJson('/api/auth/user-verify-mobile', $data)
+        $this->postJson('/api/user/verify-mobile', $data)
             ->assertOk()
             ->assertStatus(200)
             ->assertJson([
@@ -274,7 +274,7 @@ class UserControllerTest extends TestCase
             'mobile' => $user->mobile,
         ];
 
-        $this->postJson('/api/auth/user-resend-verify-code', $data)
+        $this->postJson('/api/user/resend-verify-code', $data)
             ->assertOk()
             ->assertStatus(200)
             ->assertJson([
@@ -288,7 +288,7 @@ class UserControllerTest extends TestCase
         $user = UserFactory::new()->verified()->createOne();
         $user->createToken('API TOKEN')->plainTextToken;
 
-        $this->actingAs($user)->deleteJson('/api/auth/user-logout')
+        $this->actingAs($user)->deleteJson('/api/user/logout')
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
@@ -300,7 +300,7 @@ class UserControllerTest extends TestCase
 
     public function testLogoutUnauthenticatedUser(): void
     {
-        $this->deleteJson('/api/auth/user-logout')
+        $this->deleteJson('/api/user/logout')
             ->assertStatus(401)
             ->assertJson([
                 'message' => 'Unauthenticated.',
@@ -322,7 +322,7 @@ class UserControllerTest extends TestCase
         $this->assertNotEquals($user->longitude, $data['longitude']);
 
         $this->actingAs($user)
-            ->postJson('api/auth/user-update-location', $data)
+            ->postJson('api/user/update-location', $data)
             ->assertOk()
             ->assertJson(['message' => 'Your location is updated successfully']);
     }
