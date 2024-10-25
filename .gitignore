@@ -21,3 +21,4 @@ yarn-error.log
 /.vscode
 /.zed
 /coverage
+.php-cs-fixer.cache
