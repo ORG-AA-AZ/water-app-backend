@@ -4,13 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VerifyRequest extends FormRequest
+class SetLocationRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'mobile' => ['required', 'string', 'regex:/^\d{10}$/'],
-            'code' => ['required', 'string', 'regex:/^\d{6}$/'],
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
         ];
     }
 
@@ -18,7 +19,8 @@ class VerifyRequest extends FormRequest
     {
         return [
             'mobile' => 'mobile number',
-            'code' => 'verify code',
+            'latitude' => 'latitude',
+            'longitude' => 'longitude',
         ];
     }
 
@@ -27,8 +29,8 @@ class VerifyRequest extends FormRequest
         return [
             'mobile.required' => __('validation.required', ['attribute' => $this->attributes()['mobile']]),
             'mobile.regex' => __('validation.regex', ['attribute' => $this->attributes()['mobile']]),
-            'code.required' => __('validation.required', ['attribute' => $this->attributes()['code']]),
-            'code.regex' => __('validation.regex', ['attribute' => $this->attributes()['code']]),
+            'latitude.required' => __('validation.required', ['attribute' => $this->attributes()['latitude']]),
+            'longitude.required' => __('validation.required', ['attribute' => $this->attributes()['longitude']]),
         ];
     }
 }

@@ -40,11 +40,11 @@ class MarketplaceControllerTest extends TestCase
             'longitude' => $longitude = $this->faker->longitude(),
         ];
 
-        $this->postJson('/api/auth/marketplace-register', $data)
+        $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(201)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Account registered successfully. Verify your mobile number',
+                'message' => __('messages.mobile_registered_successfully'),
             ]);
 
         $this->assertDatabaseHas('marketplaces', [
@@ -73,7 +73,7 @@ class MarketplaceControllerTest extends TestCase
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),        ];
 
-        $this->postJson('/api/auth/marketplace-register', $data)
+        $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(422)
             ->assertJson([
                 'message' => 'The password confirmation does not match.',
@@ -97,12 +97,12 @@ class MarketplaceControllerTest extends TestCase
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),        ];
 
-        $this->postJson('/api/auth/marketplace-register', $data)
+        $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(422)
             ->assertJson([
-                'message' => 'The national ID has already been taken.',
+                'message' => __('validation.unique', ['attribute' => 'national ID']),
                 'errors' => [
-                    'national_id' => ['The national ID has already been taken.'],
+                    'national_id' => [__('validation.unique', ['attribute' => 'national ID'])],
                 ],
             ]);
     }
@@ -121,12 +121,12 @@ class MarketplaceControllerTest extends TestCase
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),        ];
 
-        $this->postJson('/api/auth/marketplace-register', $data)
+        $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(422)
             ->assertJson([
-                'message' => 'The mobile number has already been taken.',
+                'message' => __('validation.unique', ['attribute' => 'mobile number']),
                 'errors' => [
-                    'mobile' => ['The mobile number has already been taken.'],
+                    'mobile' => [__('validation.unique', ['attribute' => 'mobile number'])],
                 ],
             ]);
     }
@@ -138,11 +138,11 @@ class MarketplaceControllerTest extends TestCase
 
         $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->deleteJson('/api/auth/marketplace-logout')
+        ])->deleteJson('/api/marketplace/logout')
             ->assertStatus(200)
             ->assertJson([
                 'status' => 'success',
-                'message' => 'Logged out successfully.',
+                'message' => __('messages.logout'),
             ]);
 
         $this->assertCount(0, $marketplace->tokens);
@@ -151,7 +151,7 @@ class MarketplaceControllerTest extends TestCase
 
     public function testLogoutUnauthenticatedUser(): void
     {
-        $this->deleteJson('/api/auth/user-logout')
+        $this->deleteJson('/api/marketplace/logout')
             ->assertStatus(401)
             ->assertJson([
                 'message' => 'Unauthenticated.',

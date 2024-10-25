@@ -31,18 +31,18 @@ class LoginAndRegisterService
         $entity = $model->value::where('mobile', $data['mobile'])->first();
 
         if (! $entity) {
-            throw new \Exception('Mobile number is not registered');
+            throw new \Exception(__('messages.mobile_not_registered'));
         }
 
         if (is_null($entity->mobile_verified_at)) {
-            throw new \Exception('Your mobile number is not verified');
+            throw new \Exception(__('messages.mobile_not_verified'));
         }
 
         $login_using_password = Auth::attempt(['mobile' => $data['mobile'], 'password' => $data['password']]);
         $login_using_reset_password = Hash::check($data['password'], $entity->reset_password);
 
         if (! $login_using_password && ! $login_using_reset_password) {
-            throw new \Exception('Invalid login credentials');
+            throw new \Exception(__('messages.invalid_login'));
         }
 
         return $entity;
@@ -58,7 +58,7 @@ class LoginAndRegisterService
         $entity = $model->value::where('mobile', $data['mobile'])->first();
 
         if (! $entity) {
-            throw new \Exception('Your mobile number is not registered');
+            throw new \Exception(__('messages.mobile_not_registered'));
         }
 
         $entity->update(['reset_password' => $reset_password = Str::random(10)]);
@@ -75,13 +75,13 @@ class LoginAndRegisterService
             'mobile' => $data['mobile'],
             'password' => Hash::make($data['password']),
             'mobile_verification_code' => $verification_code,
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
         ];
 
         // Add marketplace-specific fields
         if (isset($data['national_id'])) {
             $retrieved_data['national_id'] = $data['national_id'];
+            $retrieved_data['latitude'] = $data['latitude'];
+            $retrieved_data['longitude'] = $data['longitude'];
         }
 
         return $retrieved_data;

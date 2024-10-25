@@ -15,12 +15,21 @@ class VerifyMobileNumber
 
     public function verifyMobile(ModelsEnum $model, VerifyRequest $request)
     {
-        $entity = $model->value::where('mobile', $request->input('mobile'))->where('mobile_verification_code', $request->input('code'))->first();
+        $entity = $model->value::where('mobile', $request->input('mobile'))->first();
 
         if (! $entity) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Invalid verification code',
+                'message' => __('messages.mobile_not_registered'),
+            ], 422);
+        }
+
+        $entity = $entity->where('mobile_verification_code', $request->input('code'))->first();
+
+        if (! $entity) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('messages.invalid_verification_code'),
             ], 422);
         }
 
@@ -29,8 +38,8 @@ class VerifyMobileNumber
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Mobile number verified successfully',
-        ], 200);
+            'message' => __('messages.mobile_verified_successfully'),
+        ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function setNewVerificationCode(ModelsEnum $model, NewVerifyCodeRequest $request)
@@ -40,7 +49,7 @@ class VerifyMobileNumber
         if (! $entity) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Entity not found',
+                'message' => __('messages.mobile_not_registered'),
             ], 404);
         }
 
@@ -51,7 +60,7 @@ class VerifyMobileNumber
 
         return response()->json([
             'status' => 'success',
-            'message' => 'New verification code sent successfully.',
-        ], 200);
+            'message' => __('messages.new_verification_code_sent'),
+        ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 }

@@ -17,7 +17,7 @@ abstract class BaseAuthController extends Controller
     public function register(ModelsEnum $model, $request, array $model_specific_fields = []): JsonResponse
     {
         $data = array_merge(
-            $request->only(['name', 'mobile', 'password', 'latitude', 'longitude']),
+            $request->only(['name', 'mobile', 'password']),
             $model_specific_fields
         );
 
@@ -26,8 +26,8 @@ abstract class BaseAuthController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Account registered successfully. Verify your mobile number',
-            ], 201);
+                'message' => __('messages.mobile_registered_successfully'),
+            ], 201, [], JSON_UNESCAPED_UNICODE);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -45,7 +45,7 @@ abstract class BaseAuthController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Login successful',
+                'message' => __('messages.login_successfully'),
                 'data' => [
                     'id' => $entity->id,
                     'name' => $entity->name,
@@ -70,7 +70,7 @@ abstract class BaseAuthController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Password reset successful',
+                'message' => __('messages.reset_password_successfully'),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -89,7 +89,7 @@ abstract class BaseAuthController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Login using new password that sent to mobile.',
+                'message' => __('messages.sent_new_password'),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -108,7 +108,7 @@ abstract class BaseAuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Logged out successfully.',
+            'message' => __('messages.logout'),
         ], 200);
     }
 }

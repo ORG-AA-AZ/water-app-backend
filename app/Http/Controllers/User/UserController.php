@@ -7,11 +7,11 @@ use App\Http\Controllers\BaseAuthController;
 use App\Http\Controllers\Services\Location;
 use App\Http\Controllers\Services\LoginAndRegisterService;
 use App\Http\Controllers\Services\VerifyMobileNumber;
-use App\Http\Requests\ChangeLocationRequest;
 use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\NewVerifyCodeRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\SetLocationRequest;
 use App\Http\Requests\VerifyRequest;
 
 class UserController extends BaseAuthController
@@ -59,8 +59,8 @@ class UserController extends BaseAuthController
         return $this->verify_mobile_number->setNewVerificationCode(ModelsEnum::User, $request);
     }
 
-    public function changeLocation(ChangeLocationRequest $request): void
+    public function setLocation(SetLocationRequest $request)
     {
-        $this->location->changeLocation(ModelsEnum::User, $request);
+        return $this->location->setLocation(ModelsEnum::User, $request);
     }
 }

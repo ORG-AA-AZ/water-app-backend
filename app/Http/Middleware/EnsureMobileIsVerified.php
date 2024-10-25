@@ -13,8 +13,8 @@ class EnsureMobileIsVerified
      */
     public function handle($request, Closure $next)
     {
-        if (! $request->user() || ! $request->user()->mobile_verified_at) {
-            return response()->json(['message' => 'Your mobile number is not verified'], 403);
+        if (! $request->user()->mobile_verified_at) {
+            return response()->json(['message' => __('messages.mobile_not_verified')], 403);
         }
 
         return $next($request);
