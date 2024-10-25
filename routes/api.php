@@ -28,11 +28,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware([EnsureMobileIsVerified::class])->group(function () {
         Route::post('/auth/user-reset-password', [UserController::class, 'resetUserPassword']);
         Route::delete('/auth/user-logout', [UserController::class, 'logoutUser']);
-        Route::delete('/auth/marketplace-logout', [MarketplaceController::class, 'logoutMarketplace']);
-    });
-
-    // Marketplace owner middleware
-    Route::middleware([EnsureMarketplaceOwner::class])->group(function () {
-        Route::get('/add-new-product', [MarketplaceController::class, 'addProduct']);
+        Route::post('/auth/user-update-location', [UserController::class, 'updateLocation']);
+        
+        // Marketplace owner middleware
+        Route::middleware([EnsureMarketplaceOwner::class])->group(function () {
+            Route::delete('/auth/marketplace-logout', [MarketplaceController::class, 'logoutMarketplace']);
+            Route::get('/add-new-product', [MarketplaceController::class, 'addProduct']);
+        });
     });
 });

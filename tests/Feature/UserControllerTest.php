@@ -306,4 +306,24 @@ class UserControllerTest extends TestCase
                 'message' => 'Unauthenticated.',
             ]);
     }
+
+    public function testUpdateUserLocation(): void
+    {
+        $this->faker = Factory::create();
+        $user = UserFactory::new()->verified()->createOne();
+
+        $data = [
+            'mobile' => $user->mobile,
+            'latitude' => $this->faker->latitude(),
+            'longitude' => $this->faker->longitude(),
+        ];
+
+        $this->assertNotEquals($user->latitude, $data['latitude']);
+        $this->assertNotEquals($user->longitude, $data['longitude']);
+
+        $this->actingAs($user)
+            ->postJson('api/auth/user-update-location', $data)
+            ->assertOk()
+            ->assertJson(['message' => 'Your location is updated successfully']);
+    }
 }
