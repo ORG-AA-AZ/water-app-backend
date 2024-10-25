@@ -174,10 +174,10 @@ class UserControllerTest extends TestCase
     {
         $user = UserFactory::new()->verified()->createOne();
 
-        // $data = [
-        //     'mobile' => $user->mobile,
-        //     'password' => 'password',
-        // ];
+        $data = [
+            'mobile' => $user->mobile,
+            'password' => 'password',
+        ];
 
         $this->postJson('/api/auth/user-login', $data)
             ->assertOk()
