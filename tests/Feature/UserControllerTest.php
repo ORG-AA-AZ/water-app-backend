@@ -313,7 +313,7 @@ class UserControllerTest extends TestCase
         $user = UserFactory::new()->verified()->createOne();
 
         $data = [
-            'mobile' => $user->mobile,
+            'mobile' => $user->mobile, 
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),
         ];
