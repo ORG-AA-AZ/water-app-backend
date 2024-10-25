@@ -13,7 +13,7 @@ class SetLanguageRequest extends FormRequest
         return [
             'lang' => [
                 'required',
-                Rule::in(LanguagesEnum::cases())
+                Rule::in(LanguagesEnum::cases()),
             ],
         ];
     }

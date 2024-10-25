@@ -7,11 +7,11 @@ use App\Http\Controllers\BaseAuthController;
 use App\Http\Controllers\Services\Location;
 use App\Http\Controllers\Services\LoginAndRegisterService;
 use App\Http\Controllers\Services\VerifyMobileNumber;
-use App\Http\Requests\SetLocationRequest;
 use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\NewVerifyCodeRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\SetLocationRequest;
 use App\Http\Requests\VerifyRequest;
 
 class MarketplaceController extends BaseAuthController

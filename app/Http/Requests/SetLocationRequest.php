@@ -14,7 +14,7 @@ class SetLocationRequest extends FormRequest
             'longitude' => ['required', 'numeric', 'between:-180,180'],
         ];
     }
-    
+
     public function attributes(): array
     {
         return [

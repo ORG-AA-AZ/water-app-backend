@@ -76,7 +76,7 @@ class LoginAndRegisterService
             'password' => Hash::make($data['password']),
             'mobile_verification_code' => $verification_code,
         ];
-        
+
         // Add marketplace-specific fields
         if (isset($data['national_id'])) {
             $retrieved_data['national_id'] = $data['national_id'];

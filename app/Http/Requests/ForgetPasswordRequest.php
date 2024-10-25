@@ -12,7 +12,7 @@ class ForgetPasswordRequest extends FormRequest
             'mobile' => ['required', 'string', 'regex:/^\d{10}$/'],
         ];
     }
-    
+
     public function attributes(): array
     {
         return [

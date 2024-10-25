@@ -12,6 +12,6 @@ class SetLanguage
         $locale = $request->input('lang') ?? 'ar';
         App::setLocale($locale);
 
-        return response()->json(['message' =>  __('messages.set_language_successfully')]);
+        return response()->json(['message' => __('messages.set_language_successfully')]);
     }
 }
