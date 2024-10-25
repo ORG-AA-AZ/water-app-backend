@@ -11,8 +11,7 @@ class Location
     {
         $entity = $model->value::where('mobile', $request->input('mobile'))->first();
 
-        if(!$entity)
-        {
+        if (! $entity) {
             return response()->json(['message' => 'The mobile number is not registered']);
         }
 
