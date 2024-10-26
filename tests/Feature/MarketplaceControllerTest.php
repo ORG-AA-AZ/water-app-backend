@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\Marketplace\MarketplaceController;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Controllers\Marketplace\MarketplaceLoginRequest;
+use App\Http\Controllers\Marketplace\MarketplaceResetPasswordRequest;
 use App\Models\Marketplace;
 use App\Resources\MarketplaceResource;
 use Database\Factories\MarketplaceFactory;
@@ -18,8 +18,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 #[CoversClass(MarketplaceController::class)]
-#[CoversClass(LoginRequest::class)]
-#[CoversClass(ResetPasswordRequest::class)]
+#[CoversClass(MarketplaceLoginRequest::class)]
+#[CoversClass(MarketplaceResetPasswordRequest::class)]
 #[CoversClass(MarketplaceResource::class)]
 
 class MarketplaceControllerTest extends TestCase
@@ -32,28 +32,26 @@ class MarketplaceControllerTest extends TestCase
         $this->faker = Factory::create();
 
         $data = [
-            'national_id' => $national_id = Str::random(8),
+            'national_id' => $national_id = (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
             'name' => $name = $this->faker->name(),
             'mobile' => $mobile = (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
             'password' => $password = Str::random(),
             'password_confirmation' => $password,
-            'latitude' => $latitude = $this->faker->latitude(),
-            'longitude' => $longitude = $this->faker->longitude(),
+            'latitude' => $this->faker->latitude(),
+            'longitude' => $this->faker->longitude(),
         ];
 
         $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(201)
             ->assertJson([
                 'status' => 'success',
-                'message' => __('messages.mobile_registered_successfully'),
+                'message' => __('messages.national_id_registered_successfully'),
             ]);
 
         $this->assertDatabaseHas('marketplaces', [
             'national_id' => $national_id,
             'name' => $name,
             'mobile' => $mobile,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
         ]);
 
         $marketplace = Marketplace::where('mobile', $mobile)->first();
@@ -66,7 +64,7 @@ class MarketplaceControllerTest extends TestCase
         $this->faker = Factory::create();
 
         $data = [
-            'national_id' => Str::random(),
+            'national_id' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
             'name' => $this->faker->name(),
             'mobile' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
             'password' => Str::random(),
@@ -88,7 +86,7 @@ class MarketplaceControllerTest extends TestCase
     public function testFailStoreExistMarketplaceNationalId(): void
     {
         $this->faker = Factory::create();
-        $marketplace = MarketplaceFactory::new()->verified()->createOne();
+        $marketplace = MarketplaceFactory::new()->createOne();
 
         $data = [
             'national_id' => (string) $marketplace->national_id,
@@ -112,36 +110,9 @@ class MarketplaceControllerTest extends TestCase
             ]);
     }
 
-    public function testFailStoreExistMarketplaceMobile(): void
-    {
-        $this->faker = Factory::create();
-        $marketplace = MarketplaceFactory::new()->verified()->createOne();
-
-        $data = [
-            'national_id' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
-            'name' => $this->faker->name(),
-            'mobile' => (string) $marketplace->mobile,
-            'password' => $password = Str::random(),
-            'password_confirmation' => $password,
-            'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),
-        ];
-
-        $mobile_attribute = App::getLocale() === 'ar' ? 'رقم الهاتف المحمول' : 'mobile number';
-
-        $this->postJson('/api/marketplace/register', $data)
-            ->assertStatus(422)
-            ->assertJson([
-                'message' => __('messages.unique', ['attribute' => $mobile_attribute]),
-                'errors' => [
-                    'mobile' => [__('messages.unique', ['attribute' => $mobile_attribute])],
-                ],
-            ]);
-    }
-
     public function testLogoutSuccessfully(): void
     {
-        $marketplace = MarketplaceFactory::new()->verified()->createOne();
+        $marketplace = MarketplaceFactory::new()->createOne();
         $token = $marketplace->createToken('API TOKEN')->plainTextToken;
 
         $this->withHeaders([

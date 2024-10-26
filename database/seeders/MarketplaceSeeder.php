@@ -18,7 +18,7 @@ class MarketplaceSeeder extends Seeder
             'national_id' => fake()->numberBetween(1000000000, 9999999999),
             'name' => fake()->name(),
             'mobile' => fake()->numberBetween(1000000000, 9999999999),
-            'mobile_verified_at' => now(),
+            'is_active' => true,
             'password' => Hash::make('password123'),
             'remember_token' => Str::random(10),
             'latitude' => 29.533224,

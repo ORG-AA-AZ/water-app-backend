@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Controllers\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 
-class LoginRequest extends FormRequest
+class UserSetLocationRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
             'mobile' => ['required', 'string', 'regex:/^\d{10}$/'],
-            'password' => ['required', 'string'],
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
         ];
     }
 
@@ -20,12 +21,14 @@ class LoginRequest extends FormRequest
         if (App::getLocale() === 'en') {
             return [
                 'mobile' => 'mobile number',
-                'password' => 'password',
+                'latitude' => 'latitude',
+                'longitude' => 'longitude',
             ];
         } else {
             return [
                 'mobile' => 'رقم الهاتف المحمول',
-                'password' => 'كلمة المرور',
+                'latitude' => 'خط العرض',
+                'longitude' => 'خط الطول',
             ];
         }
     }
@@ -35,9 +38,8 @@ class LoginRequest extends FormRequest
         return [
             'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
             'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.unique' => __('messages.unique', ['attribute' => $this->attributes()['mobile']]),
-            'password.required' => __('messages.required', ['attribute' => $this->attributes()['password']]),
-            'password.confirmed' => __('The password confirmation does not match.'),
+            'latitude.required' => __('messages.required', ['attribute' => $this->attributes()['latitude']]),
+            'longitude.required' => __('messages.required', ['attribute' => $this->attributes()['longitude']]),
         ];
     }
 }

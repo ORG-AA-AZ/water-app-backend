@@ -11,9 +11,9 @@ class MarketplaceRegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'mobile' => ['required', 'string', 'regex:/^\d{10}$/', 'unique:marketplaces,mobile'],
+            'mobile' => ['required', 'string', 'regex:/^\d{10}$/'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'national_id' => ['required', 'string', 'min:8', 'unique:marketplaces,national_id'],
+            'national_id' => ['required', 'string', 'regex:/^\d{10}$/', 'unique:marketplaces,national_id'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
         ];
@@ -47,9 +47,9 @@ class MarketplaceRegisterRequest extends FormRequest
         return [
             'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
             'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.unique' => __('messages.unique', ['attribute' => $this->attributes()['mobile']]),
             'national_id.required' => __('messages.required', ['attribute' => $this->attributes()['national_id']]),
             'national_id.unique' => __('messages.unique', ['attribute' => $this->attributes()['national_id']]),
+            'national_id.regex' => __('messages.unique', ['attribute' => $this->attributes()['national_id']]),
             'password.required' => __('messages.required', ['attribute' => $this->attributes()['password']]),
             'password.confirmed' => __('The password confirmation does not match.'),
             'latitude.required' => __('messages.required', ['attribute' => $this->attributes()['latitude']]),

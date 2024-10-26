@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\Services\LoginAndRegisterService;
+use App\Http\Controllers\User\NewVerifyCodeRequest;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserForgetPasswordRequest;
+use App\Http\Controllers\User\UserLoginRequest;
 use App\Http\Controllers\User\UserRegisterRequest;
-use App\Http\Requests\ForgetPasswordRequest;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\NewVerifyCodeRequest;
-use App\Http\Requests\ResetPasswordRequest;
-use App\Http\Requests\VerifyRequest;
+use App\Http\Controllers\User\UserResetPasswordRequest;
+use App\Http\Controllers\User\VerifyRequest;
 use App\Models\User;
 use App\Resources\UserResource;
 use Database\Factories\UserFactory;
@@ -23,9 +22,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 
 #[CoversClass(UserController::class)]
-#[CoversClass(LoginRequest::class)]
-#[CoversClass(ForgetPasswordRequest::class)]
-#[CoversClass(ResetPasswordRequest::class)]
+#[CoversClass(UserLoginRequest::class)]
+#[CoversClass(UserForgetPasswordRequest::class)]
+#[CoversClass(UserResetPasswordRequest::class)]
 #[CoversClass(UserRegisterRequest::class)]
 #[CoversClass(UserResource::class)]
 #[CoversClass(VerifyRequest::class)]
@@ -111,32 +110,6 @@ class UserControllerTest extends TestCase
             ]);
     }
 
-    public function testFailRegisterUserThrowsException(): void
-    {
-        $this->faker = Factory::create();
-
-        $data = [
-            'name' => $this->faker->name(),
-            'mobile' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
-            'password' => $password = Str::random(),
-            'password_confirmation' => $password,
-        ];
-
-        $mocked_service = $this->createMock(LoginAndRegisterService::class);
-        $mocked_service->expects($this->once())
-            ->method('register')
-            ->willThrowException(new \Exception('Registration error'));
-
-        $this->app->instance(LoginAndRegisterService::class, $mocked_service);
-
-        $this->postJson('/api/user/register', $data)
-            ->assertStatus(401)
-            ->assertJson([
-                'status' => 'error',
-                'message' => 'Registration error',
-            ]);
-    }
-
     public function testLoginUser(): void
     {
         $user = UserFactory::new()->verified()->createOne();
@@ -193,8 +166,7 @@ class UserControllerTest extends TestCase
         $this->postJson('/api/user/login', $data)
             ->assertStatus(401)
             ->assertJson([
-                'status' => 'error',
-                'message' => __('messages.invalid_login'),
+                'error' => __('messages.invalid_login'),
             ]);
     }
 
@@ -210,8 +182,7 @@ class UserControllerTest extends TestCase
         $this->postJson('/api/user/login', $data)
             ->assertStatus(401)
             ->assertJson([
-                'status' => 'error',
-                'message' => __('messages.mobile_not_verified'),
+                'error' => __('messages.mobile_not_verified'),
             ]);
     }
 

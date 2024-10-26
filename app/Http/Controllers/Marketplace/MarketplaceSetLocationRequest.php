@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Controllers\Marketplace;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 
-class SetLocationRequest extends FormRequest
+class MarketplaceSetLocationRequest extends FormRequest
 {
     public function rules(): array
     {

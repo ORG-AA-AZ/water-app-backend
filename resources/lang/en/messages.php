@@ -10,7 +10,10 @@ return [
 
     // Response messages
     'mobile_registered_successfully' => 'Your account has been successfully registered. Please verify your mobile number.',
+    'failed_to_register' => 'Failed to register. Please check the data entered.',
+    'national_id_registered_successfully' => 'The marketplace is registered successfully.',
     'mobile_not_registered' => 'This mobile number is not registered.',
+    'national_id_not_registered' => 'The national id is not registered in out database.',
     'login_successfully' => 'Logged in successfully.',
     'invalid_login' => 'Invalid login credentials.',
     'reset_password_successfully' => 'Password has been reset successfully.',
@@ -21,4 +24,8 @@ return [
     'new_verification_code_sent' => 'A new verification code has been sent.',
     'location_located' => 'Your location has been updated successfully.',
     'set_language_successfully' => 'The app language has been changed successfully.',
+    'invalid_verification' => 'Invalid verification. Check your mobile number and verification code.',
+    'invaild_new_verification' => 'Failed to send new varification code. Check if mobile number is registered.',
+    'fail_process' => 'Process failed. Please try again later.',
+    'inactive_marketplace' => 'The account is inactive.',
 ];
