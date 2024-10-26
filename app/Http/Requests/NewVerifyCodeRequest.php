@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\App;
 
 class NewVerifyCodeRequest extends FormRequest
 {
@@ -15,16 +16,23 @@ class NewVerifyCodeRequest extends FormRequest
 
     public function attributes(): array
     {
-        return [
-            'mobile' => 'mobile number',
-        ];
+        if(App::getLocale() === 'en')
+        {
+            return [
+                'mobile' => 'mobile number',
+            ];
+        } else {
+            return [
+                'mobile' => 'رقم الهاتف المحمول',
+            ];
+        }
     }
 
     public function messages(): array
     {
         return [
-            'mobile.required' => __('validation.required', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.regex' => __('validation.regex', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
         ];
     }
 }

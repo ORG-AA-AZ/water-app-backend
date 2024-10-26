@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 
 class UserRegisterRequest extends FormRequest
 {
@@ -17,22 +19,31 @@ class UserRegisterRequest extends FormRequest
 
     public function attributes(): array
     {
-        return [
-            'name' => 'name',
-            'mobile' => 'mobile number',
-            'password' => 'password',
-        ];
+        if(App::getLocale() === 'en')
+        {
+            return [
+                'name' => 'name',
+                'mobile' => 'mobile number',
+                'password' => 'password',
+            ];
+        } else {
+            return [
+                'name' => 'الاسم',
+                'mobile' => 'رقم الهاتف المحمول',
+                'password' => 'كلمة المرور',
+            ];
+        }
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => __('validation.required', ['attribute' => $this->attributes()['name']]),
-            'mobile.required' => __('validation.required', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.regex' => __('validation.regex', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.unique' => __('validation.unique', ['attribute' => $this->attributes()['mobile']]),
-            'password.required' => __('validation.required', ['attribute' => $this->attributes()['password']]),
-            'password.confirmed' => __('The password confirmation does not match.'),
+            'name.required' => __('messages.required', ['attribute' => $this->attributes()['name']]),
+            'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.unique' => __('messages.unique', ['attribute' => $this->attributes()['mobile']]),
+            'password.required' => __('messages.required', ['attribute' => $this->attributes()['password']]),
+            'password.confirmed' => 'The password confirmation does not match.',
         ];
     }
 }

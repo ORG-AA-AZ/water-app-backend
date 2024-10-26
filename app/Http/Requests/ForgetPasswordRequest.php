@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\App;
 
 class ForgetPasswordRequest extends FormRequest
 {
@@ -15,16 +16,23 @@ class ForgetPasswordRequest extends FormRequest
 
     public function attributes(): array
     {
-        return [
-            'mobile' => 'mobile number',
-        ];
+        if(App::getLocale() === 'en')
+        {
+            return [
+                'mobile' => 'mobile number',
+            ];
+        } else {
+            return [
+                'mobile' => 'رقم الهاتف المحمول',
+            ];
+        }
     }
 
     public function messages(): array
     {
         return [
-            'mobile.required' => __('validation.required'),
-            'mobile.regex' => __('validation.regex'),
+            'mobile.required' => __('messages.required'),
+            'mobile.regex' => __('messages.regex'),
         ];
     }
 }
