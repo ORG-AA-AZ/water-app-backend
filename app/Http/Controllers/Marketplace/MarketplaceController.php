@@ -19,7 +19,7 @@ class MarketplaceController extends Controller
 
     public function registerMarketplace(MarketplaceRegisterRequest $request)
     {
-        try {    
+        try {
             $marketplace = Marketplace::create([
                 'name' => $request->input('name'),
                 'mobile' => $request->input('mobile'),
@@ -28,7 +28,7 @@ class MarketplaceController extends Controller
                 'latitude' => $request->input('latitude'),
                 'longitude' => $request->input('longitude'),
             ]);
-    
+
             return response()->json([
                 'status' => 'success',
                 'message' => __('messages.national_id_registered_successfully'),
@@ -42,6 +42,7 @@ class MarketplaceController extends Controller
             ], 201);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json([
                 'error' => __('messages.failed_to_register'),
             ], 401);
@@ -87,6 +88,7 @@ class MarketplaceController extends Controller
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 401);
@@ -101,9 +103,9 @@ class MarketplaceController extends Controller
             if (! $entity) {
                 throw new \Exception(__('messages.mobile_not_registered'));
             }
-    
+
             $entity->update(['reset_password' => $reset_password = Str::random(10)]);
-    
+
             $this->sms_service->sendNewPassword($entity->mobile, Hash::make($reset_password));
 
             return response()->json([
@@ -112,6 +114,7 @@ class MarketplaceController extends Controller
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 401);
@@ -136,13 +139,14 @@ class MarketplaceController extends Controller
         try {
             $entity = Marketplace::where('national_id', $request->input('national_id'))->first();
             $entity->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
-    
+
             return response()->json(['message' => __('messages.location_located')]);
-        } catch(\Throwable $e)
-        {
+        } catch (\Throwable $e) {
             Log::error($e->getMessage());
+
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 422);
-        }    }
+        }
+    }
 }

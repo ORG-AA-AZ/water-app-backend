@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Enums\ModelsEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Services\LoginAndRegisterService;
-use App\Http\Controllers\User\NewVerifyCodeRequest;
-use App\Http\Controllers\User\VerifyRequest;
 use App\Models\User;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
@@ -25,14 +21,14 @@ class UserController extends Controller
     {
         try {
             $verification_code = rand(100000, 999999);
-    
+
             $user = User::create([
                 'name' => $request->input('name'),
                 'mobile' => $request->input('mobile'),
                 'password' => $request->input('password'),
                 'mobile_verification_code' => $verification_code,
             ]);
-    
+
             $this->sms_service->sendVerificationCode($user->mobile, $verification_code);
 
             return response()->json([
@@ -41,6 +37,7 @@ class UserController extends Controller
             ], 201);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json([
                 'error' => __('messages.failed_to_register'),
             ], 401);
@@ -89,6 +86,7 @@ class UserController extends Controller
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 401);
@@ -103,9 +101,9 @@ class UserController extends Controller
             if (! $user) {
                 throw new \Exception(__('messages.mobile_not_registered'));
             }
-    
+
             $user->update(['reset_password' => $reset_password = Str::random(10)]);
-    
+
             $this->sms_service->sendNewPassword($user->mobile, Hash::make($reset_password));
 
             return response()->json([
@@ -114,6 +112,7 @@ class UserController extends Controller
             ], 200);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 401);
@@ -139,13 +138,12 @@ class UserController extends Controller
             $user = User::where('mobile', $request->input('mobile'))->where('mobile_verification_code', $request->input('code'))->first();
             $user->mobile_verified_at = now();
             $user->update(['mobile_verification_code' => null]);
-            
+
             return response()->json([
                 'status' => 'success',
                 'message' => __('messages.mobile_verified_successfully'),
             ], 200);
-        } catch(\Throwable $e)
-        {
+        } catch (\Throwable $e) {
             Log::error($e->getMessage());
 
             return response()->json([
@@ -161,16 +159,14 @@ class UserController extends Controller
 
             $verification_code = rand(100000, 999999);
             $user->update(['mobile_verification_code' => $verification_code]);
-    
+
             $this->sms_service->sendVerificationCode($user->mobile, $verification_code);
 
             return response()->json([
                 'status' => 'success',
                 'message' => __('messages.new_verification_code_sent'),
             ], 200);
-
-        } catch(\Throwable $e)
-        {
+        } catch (\Throwable $e) {
             Log::error($e->getMessage());
 
             return response()->json([
@@ -184,11 +180,11 @@ class UserController extends Controller
         try {
             $user = User::where('mobile', $request->input('mobile'))->first();
             $user->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
-    
+
             return response()->json(['message' => __('messages.location_located')]);
-        } catch(\Throwable $e)
-        {
+        } catch (\Throwable $e) {
             Log::error($e->getMessage());
+
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 422);

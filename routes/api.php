@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Marketplace\MarketplaceController;
 use App\Http\Controllers\Language\SetLanguage;
+use App\Http\Controllers\Marketplace\MarketplaceController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\EnsureMarketplaceIsActive;
 use App\Http\Middleware\EnsureMobileIsVerified;
