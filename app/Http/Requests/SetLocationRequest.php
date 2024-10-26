@@ -18,8 +18,7 @@ class SetLocationRequest extends FormRequest
 
     public function attributes(): array
     {
-        if(App::getLocale() === 'en')
-        {
+        if (App::getLocale() === 'en') {
             return [
                 'mobile' => 'mobile number',
                 'latitude' => 'latitude',

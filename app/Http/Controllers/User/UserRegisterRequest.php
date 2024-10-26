@@ -4,7 +4,6 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Session;
 
 class UserRegisterRequest extends FormRequest
 {
@@ -19,8 +18,7 @@ class UserRegisterRequest extends FormRequest
 
     public function attributes(): array
     {
-        if(App::getLocale() === 'en')
-        {
+        if (App::getLocale() === 'en') {
             return [
                 'name' => 'name',
                 'mobile' => 'mobile number',

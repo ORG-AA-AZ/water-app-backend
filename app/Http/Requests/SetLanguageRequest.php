@@ -21,8 +21,7 @@ class SetLanguageRequest extends FormRequest
 
     public function attributes(): array
     {
-        if(App::getLocale() === 'en')
-        {
+        if (App::getLocale() === 'en') {
             return [
                 'lang' => 'language',
             ];
