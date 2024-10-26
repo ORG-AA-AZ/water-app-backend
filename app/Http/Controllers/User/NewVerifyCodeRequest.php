@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Controllers\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 
-class ForgetPasswordRequest extends FormRequest
+class NewVerifyCodeRequest extends FormRequest
 {
     public function rules(): array
     {
@@ -30,8 +30,8 @@ class ForgetPasswordRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'mobile.required' => __('messages.required'),
-            'mobile.regex' => __('messages.regex'),
+            'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
         ];
     }
 }

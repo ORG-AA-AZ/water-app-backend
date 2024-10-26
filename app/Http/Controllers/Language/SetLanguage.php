@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Services;
+namespace App\Http\Controllers\Language;
 
-use App\Http\Requests\SetLanguageRequest;
 use Illuminate\Support\Facades\App;
 
 class SetLanguage

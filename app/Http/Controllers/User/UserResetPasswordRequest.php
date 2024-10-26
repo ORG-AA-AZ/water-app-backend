@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Controllers\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 
-class ResetPasswordRequest extends FormRequest
+class UserResetPasswordRequest extends FormRequest
 {
     public function rules(): array
     {

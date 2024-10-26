@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\Language\SetLanguage;
 use App\Http\Controllers\Marketplace\MarketplaceController;
-use App\Http\Controllers\Services\SetLanguage;
 use App\Http\Controllers\User\UserController;
+use App\Http\Middleware\EnsureMarketplaceIsActive;
 use App\Http\Middleware\EnsureMobileIsVerified;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +38,10 @@ Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(functi
         Route::delete('logout', [UserController::class, 'logoutUser']);
         Route::post('set-location', [UserController::class, 'setLocation']);
     });
+});
 
+// Protected Routes with 'auth:sanctum' and 'EnsureMarketplaceIsActive' middlewares
+Route::middleware(['auth:sanctum', EnsureMarketplaceIsActive::class])->group(function () {
     // Marketplace Routes with 'marketplace' prefix
     Route::prefix('marketplace')->group(function () {
         Route::delete('logout', [MarketplaceController::class, 'logoutMarketplace']);

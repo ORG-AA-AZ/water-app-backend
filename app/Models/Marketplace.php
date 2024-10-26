@@ -19,6 +19,31 @@ class Marketplace extends Model
         'longitude',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'reset_password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'mobile_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'reset_password' => 'hashed',
+        ];
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);

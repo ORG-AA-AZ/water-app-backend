@@ -10,7 +10,7 @@ class LanguageServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $locale = request('lang', Session::get('locale', 'ar'));
+        $locale = request('lang', Session::get('locale', 'en'));
         Session::put('locale', $locale);
         App::setLocale($locale);
     }

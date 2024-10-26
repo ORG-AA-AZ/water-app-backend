@@ -10,7 +10,10 @@ return [
 
     // Response messages
     'mobile_registered_successfully' => 'تم تسجيل حسابك بنجاح. يرجى تأكيد رقم هاتفك المحمول.',
+    'failed_to_register' => 'فشل تسجيل. الرجاء التأكد من البيانات المدخلة.',
+    'national_id_registered_successfully' => 'تم تسجيل المنشأة بنجاح.',
     'mobile_not_registered' => 'رقم الهاتف المحمول غير مسجل.',
+    'national_id_not_registered' => 'الرقم الوطني للمنشأة غير مسجل.',
     'login_successfully' => 'تم تسجيل الدخول بنجاح.',
     'invalid_login' => 'بيانات تسجيل الدخول غير صحيحة.',
     'reset_password_successfully' => 'تم إعادة تعيين كلمة المرور بنجاح.',
@@ -21,4 +24,8 @@ return [
     'new_verification_code_sent' => 'تم إرسال رمز تحقق جديد.',
     'location_located' => 'تم تحديث موقعك بنجاح.',
     'set_language_successfully' => 'تم تغيير لغة التطبيق بنجاح.',
+    'invalid_verification' => 'فشل التحقق. تأكد من رقم هاتفك المحمول ورمز التحقق.',
+    'invaild_new_verification' => 'فشل ارسال رمز جديد. تحقق من ان رقم الهاتف مسجل في التطبيق.',
+    'fail_process' => 'فشل العملية. الرجاء المحاولة لاحقاً.',
+    'inactive_marketplace' => 'الحساب غير فعال.',
 ];
