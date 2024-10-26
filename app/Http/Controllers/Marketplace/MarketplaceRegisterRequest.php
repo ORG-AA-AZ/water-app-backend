@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Marketplace;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\App;
 
 class MarketplaceRegisterRequest extends FormRequest
 {
@@ -20,27 +21,39 @@ class MarketplaceRegisterRequest extends FormRequest
 
     public function attributes(): array
     {
-        return [
-            'mobile' => 'mobile number',
-            'national_id' => 'national ID',
-            'password' => 'password',
-            'latitude' => 'latitude',
-            'longitude' => 'longitude',
-        ];
+        if (App::getLocale() === 'en') {
+            return [
+                'name' => 'name',
+                'mobile' => 'mobile number',
+                'national_id' => 'national ID',
+                'password' => 'password',
+                'latitude' => 'latitude',
+                'longitude' => 'longitude',
+            ];
+        } else {
+            return [
+                'name' => 'الاسم',
+                'mobile' => 'رقم الهاتف المحمول',
+                'national_id' => 'الرقم الوطني للمنشأة',
+                'password' => 'كلمة المرور',
+                'latitude' => 'خط العرض',
+                'longitude' => 'خط الطول',
+            ];
+        }
     }
 
     public function messages(): array
     {
         return [
-            'mobile.required' => __('validation.required', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.regex' => __('validation.regex', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.unique' => __('validation.unique', ['attribute' => $this->attributes()['mobile']]),
-            'national_id.required' => __('validation.required', ['attribute' => $this->attributes()['national_id']]),
-            'national_id.unique' => __('validation.unique', ['attribute' => $this->attributes()['national_id']]),
-            'password.required' => __('validation.required', ['attribute' => $this->attributes()['password']]),
+            'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.unique' => __('messages.unique', ['attribute' => $this->attributes()['mobile']]),
+            'national_id.required' => __('messages.required', ['attribute' => $this->attributes()['national_id']]),
+            'national_id.unique' => __('messages.unique', ['attribute' => $this->attributes()['national_id']]),
+            'password.required' => __('messages.required', ['attribute' => $this->attributes()['password']]),
             'password.confirmed' => __('The password confirmation does not match.'),
-            'latitude.required' => __('validation.required', ['attribute' => $this->attributes()['latitude']]),
-            'longitude.required' => __('validation.required', ['attribute' => $this->attributes()['longitude']]),
+            'latitude.required' => __('messages.required', ['attribute' => $this->attributes()['latitude']]),
+            'longitude.required' => __('messages.required', ['attribute' => $this->attributes()['longitude']]),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\App;
 
 class SetLocationRequest extends FormRequest
 {
@@ -17,20 +18,28 @@ class SetLocationRequest extends FormRequest
 
     public function attributes(): array
     {
-        return [
-            'mobile' => 'mobile number',
-            'latitude' => 'latitude',
-            'longitude' => 'longitude',
-        ];
+        if (App::getLocale() === 'en') {
+            return [
+                'mobile' => 'mobile number',
+                'latitude' => 'latitude',
+                'longitude' => 'longitude',
+            ];
+        } else {
+            return [
+                'mobile' => 'رقم الهاتف المحمول',
+                'latitude' => 'خط العرض',
+                'longitude' => 'خط الطول',
+            ];
+        }
     }
 
     public function messages(): array
     {
         return [
-            'mobile.required' => __('validation.required', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.regex' => __('validation.regex', ['attribute' => $this->attributes()['mobile']]),
-            'latitude.required' => __('validation.required', ['attribute' => $this->attributes()['latitude']]),
-            'longitude.required' => __('validation.required', ['attribute' => $this->attributes()['longitude']]),
+            'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
+            'latitude.required' => __('messages.required', ['attribute' => $this->attributes()['latitude']]),
+            'longitude.required' => __('messages.required', ['attribute' => $this->attributes()['longitude']]),
         ];
     }
 }

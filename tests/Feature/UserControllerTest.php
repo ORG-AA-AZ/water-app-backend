@@ -16,6 +16,7 @@ use Database\Factories\UserFactory;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -77,12 +78,14 @@ class UserControllerTest extends TestCase
             'password_confirmation' => $password,
         ];
 
+        $mobile_attribute = App::getLocale() === 'ar' ? 'رقم الهاتف المحمول' : 'mobile number';
+
         $this->postJson('/api/user/register', $data)
             ->assertStatus(422)
             ->assertJson([
-                'message' => __('validation.unique', ['attribute' => 'mobile number']),
+                'message' => __('messages.unique', ['attribute' => $mobile_attribute]),
                 'errors' => [
-                    'mobile' => [__('validation.unique', ['attribute' => 'mobile number'])],
+                    'mobile' => [__('messages.unique', ['attribute' => $mobile_attribute])],
                 ],
             ]);
     }
@@ -289,5 +292,45 @@ class UserControllerTest extends TestCase
             ->postJson('api/user/set-location', $data)
             ->assertOk()
             ->assertJson(['message' => __('messages.location_located')]);
+    }
+
+    public function testFailSetUserLocationIfOneOfCoordinatesMissing(): void
+    {
+        $this->faker = Factory::create();
+        $user = UserFactory::new()->verified()->createOne();
+
+        $data = [
+            'mobile' => $user->mobile,
+            'longitude' => $this->faker->longitude(),
+        ];
+
+        $latitude_attribute = App::getLocale() === 'ar' ? 'خط العرض' : 'latitude';
+
+        $this->actingAs($user)
+            ->postJson('api/user/set-location', $data)
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => __('messages.required', ['attribute' => $latitude_attribute]),
+                'errors' => [
+                    'latitude' => [__('messages.required', ['attribute' => $latitude_attribute])],
+                ],
+            ]);
+
+        $data = [
+            'mobile' => $user->mobile,
+            'latitude' => $this->faker->latitude(),
+        ];
+
+        $longitude_attribute = App::getLocale() === 'ar' ? 'خط الطول' : 'longitude';
+
+        $this->actingAs($user)
+            ->postJson('api/user/set-location', $data)
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => __('messages.required', ['attribute' => $longitude_attribute]),
+                'errors' => [
+                    'longitude' => [__('messages.required', ['attribute' => $longitude_attribute])],
+                ],
+            ]);
     }
 }

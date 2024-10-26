@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\App;
 
 class VerifyRequest extends FormRequest
 {
@@ -16,19 +17,26 @@ class VerifyRequest extends FormRequest
 
     public function attributes(): array
     {
-        return [
-            'mobile' => 'mobile number',
-            'code' => 'verify code',
-        ];
+        if (App::getLocale() === 'en') {
+            return [
+                'mobile' => 'mobile number',
+                'code' => 'verify code',
+            ];
+        } else {
+            return [
+                'mobile' => 'رقم الهاتف المحمول',
+                'code' => 'رمز التأكيد',
+            ];
+        }
     }
 
     public function messages(): array
     {
         return [
-            'mobile.required' => __('validation.required', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.regex' => __('validation.regex', ['attribute' => $this->attributes()['mobile']]),
-            'code.required' => __('validation.required', ['attribute' => $this->attributes()['code']]),
-            'code.regex' => __('validation.regex', ['attribute' => $this->attributes()['code']]),
+            'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
+            'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
+            'code.required' => __('messages.required', ['attribute' => $this->attributes()['code']]),
+            'code.regex' => __('messages.regex', ['attribute' => $this->attributes()['code']]),
         ];
     }
 }

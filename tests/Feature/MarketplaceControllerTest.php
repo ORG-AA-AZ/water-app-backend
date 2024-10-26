@@ -11,6 +11,7 @@ use Database\Factories\MarketplaceFactory;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -71,7 +72,8 @@ class MarketplaceControllerTest extends TestCase
             'password' => Str::random(),
             'password_confirmation' => Str::random(),
             'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),        ];
+            'longitude' => $this->faker->longitude(),
+        ];
 
         $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(422)
@@ -95,14 +97,17 @@ class MarketplaceControllerTest extends TestCase
             'password' => $password = Str::random(),
             'password_confirmation' => $password,
             'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),        ];
+            'longitude' => $this->faker->longitude(),
+        ];
+
+        $national_id_attribute = App::getLocale() === 'ar' ? 'الرقم الوطني للمنشأة' : 'national ID';
 
         $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(422)
             ->assertJson([
-                'message' => __('validation.unique', ['attribute' => 'national ID']),
+                'message' => __('messages.unique', ['attribute' => $national_id_attribute]),
                 'errors' => [
-                    'national_id' => [__('validation.unique', ['attribute' => 'national ID'])],
+                    'national_id' => [__('messages.unique', ['attribute' => $national_id_attribute])],
                 ],
             ]);
     }
@@ -119,14 +124,17 @@ class MarketplaceControllerTest extends TestCase
             'password' => $password = Str::random(),
             'password_confirmation' => $password,
             'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),        ];
+            'longitude' => $this->faker->longitude(),
+        ];
+
+        $mobile_attribute = App::getLocale() === 'ar' ? 'رقم الهاتف المحمول' : 'mobile number';
 
         $this->postJson('/api/marketplace/register', $data)
             ->assertStatus(422)
             ->assertJson([
-                'message' => __('validation.unique', ['attribute' => 'mobile number']),
+                'message' => __('messages.unique', ['attribute' => $mobile_attribute]),
                 'errors' => [
-                    'mobile' => [__('validation.unique', ['attribute' => 'mobile number'])],
+                    'mobile' => [__('messages.unique', ['attribute' => $mobile_attribute])],
                 ],
             ]);
     }
