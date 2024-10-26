@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->string('national_id')->unique();
             $table->string('mobile');
             $table->boolean('is_active')->default(true);
-            $table->decimal('latitude', 10, 8)->index('user_latitude');
-            $table->decimal('longitude', 11, 8)->index('user_longitude');
+            $table->decimal('latitude', 10, 8)->index('marketplace_latitude');
+            $table->decimal('longitude', 11, 8)->index('marketplace_longitude');
             $table->string('password');
             $table->string('reset_password')->nullable();
             $table->rememberToken();
