@@ -153,6 +153,7 @@ class MarketplaceController extends Controller
     {
         try {
             $request->marketplace->update(['description' => $request->input('description')]);
+
             return response()->json(['message' => __('messages.description_updated')]);
         } catch (\Throwable $e) {
             Log::error($e->getMessage());

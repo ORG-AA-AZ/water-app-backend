@@ -13,6 +13,7 @@ class UserSetLocationRequest extends FormRequest
     public function authorize(): bool
     {
         $this->user = User::where('mobile', $this->input('mobile'))->first();
+
         return $this->user()->can('update', $this->user);
     }
 

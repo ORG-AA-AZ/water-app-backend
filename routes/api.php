@@ -31,7 +31,7 @@ Route::prefix('marketplace')->group(function () {
 Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(function () {
     // Routes available to authenticated users
     Route::get('marketplaces', [MarketplaceController::class, 'index']);
-    
+
     // User Routes with 'user' prefix
     Route::prefix('user')->group(function () {
         Route::post('reset-password', [UserController::class, 'resetUserPassword']);

@@ -39,7 +39,7 @@ class MarketplaceFactory extends Factory
             'latitude' => (string) fake()->latitude(),
             'longitude' => (string) fake()->longitude(),
             'description' => fake()->text(50),
-            "rate_and_review" => null
+            'rate_and_review' => null,
         ];
     }
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Marketplace;
 
-use App\Models\Marketplace;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 

@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Marketplace;
-use App\Policies\MarketplacePolicy;
 use App\Models\User;
+use App\Policies\MarketplacePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 

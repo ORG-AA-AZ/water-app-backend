@@ -13,6 +13,7 @@ class MarketplaceSetLocationRequest extends FormRequest
     public function authorize(): bool
     {
         $this->marketplace = Marketplace::where('national_id', $this->input('national_id'))->first();
+
         return $this->user()->can('update', $this->marketplace);
     }
 
