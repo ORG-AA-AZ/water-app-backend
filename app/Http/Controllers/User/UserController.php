@@ -78,7 +78,7 @@ class UserController extends Controller
     public function resetUserPassword(UserResetPasswordRequest $request)
     {
         try {
-            User::where('mobile', $request->input('mobile'))->first()->update(['password' => $request->input('password')]);
+            $request->user->where('mobile', $request->input('mobile'))->first()->update(['password' => $request->input('password')]);
 
             return response()->json([
                 'status' => 'success',
@@ -178,8 +178,7 @@ class UserController extends Controller
     public function setLocation(UserSetLocationRequest $request)
     {
         try {
-            $user = User::where('mobile', $request->input('mobile'))->first();
-            $user->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
+            $request->user->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
 
             return response()->json(['message' => __('messages.location_located')]);
         } catch (\Throwable $e) {

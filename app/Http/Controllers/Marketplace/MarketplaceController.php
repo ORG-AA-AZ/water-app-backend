@@ -137,10 +137,23 @@ class MarketplaceController extends Controller
     public function setLocation(MarketplaceSetLocationRequest $request)
     {
         try {
-            $entity = Marketplace::where('national_id', $request->input('national_id'))->first();
-            $entity->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
+            $request->marketplace->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
 
             return response()->json(['message' => __('messages.location_located')]);
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'error' => __('messages.fail_process'),
+            ], 422);
+        }
+    }
+
+    public function setDescription(MarketplaceDescriptionRequest $request)
+    {
+        try {
+            $request->marketplace->update(['description' => $request->input('description')]);
+            return response()->json(['message' => __('messages.description_updated')]);
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
 

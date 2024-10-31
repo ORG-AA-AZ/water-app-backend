@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Marketplace;
 
+use App\Models\Marketplace;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 
@@ -10,7 +11,7 @@ class MarketplaceLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'mobile' => ['required', 'string', 'regex:/^\d{10}$/'],
+            'national_id' => ['required', 'string', 'regex:/^\d{10}$/'],
             'password' => ['required', 'string'],
         ];
     }
@@ -19,12 +20,12 @@ class MarketplaceLoginRequest extends FormRequest
     {
         if (App::getLocale() === 'en') {
             return [
-                'mobile' => 'mobile number',
+                'national_id' => 'national ID',
                 'password' => 'password',
             ];
         } else {
             return [
-                'mobile' => 'رقم الهاتف المحمول',
+                'national_id' => 'الرقم الوطني للمنشأة',
                 'password' => 'كلمة المرور',
             ];
         }
@@ -33,9 +34,9 @@ class MarketplaceLoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
-            'mobile.unique' => __('messages.unique', ['attribute' => $this->attributes()['mobile']]),
+            'national_id.required' => __('messages.required', ['attribute' => $this->attributes()['national_id']]),
+            'national_id.regex' => __('messages.regex', ['attribute' => $this->attributes()['national_id']]),
+            'national_id.unique' => __('messages.unique', ['attribute' => $this->attributes()['national_id']]),
             'password.required' => __('messages.required', ['attribute' => $this->attributes()['password']]),
             'password.confirmed' => __('The password confirmation does not match.'),
         ];

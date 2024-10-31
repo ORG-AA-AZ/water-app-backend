@@ -6,7 +6,7 @@ use App\Models\Marketplace;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 
-class MarketplaceSetLocationRequest extends FormRequest
+class MarketplaceDescriptionRequest extends FormRequest
 {
     public Marketplace $marketplace;
 
@@ -20,8 +20,7 @@ class MarketplaceSetLocationRequest extends FormRequest
     {
         return [
             'national_id' => ['required', 'string', 'regex:/^\d{10}$/'],
-            'latitude' => ['required', 'numeric', 'between:-90,90'],
-            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'description' => ['required', 'string'],
         ];
     }
 
@@ -30,14 +29,12 @@ class MarketplaceSetLocationRequest extends FormRequest
         if (App::getLocale() === 'en') {
             return [
                 'national_id' => 'national ID',
-                'latitude' => 'latitude',
-                'longitude' => 'longitude',
+                'description' => 'description',
             ];
         } else {
             return [
                 'national_id' => 'الرقم الوطني للمنشأة',
-                'latitude' => 'خط العرض',
-                'longitude' => 'خط الطول',
+                'description' => 'الوصف',
             ];
         }
     }
@@ -47,8 +44,7 @@ class MarketplaceSetLocationRequest extends FormRequest
         return [
             'national_id.required' => __('messages.required', ['attribute' => $this->attributes()['national_id']]),
             'national_id.regex' => __('messages.regex', ['attribute' => $this->attributes()['national_id']]),
-            'latitude.required' => __('messages.required', ['attribute' => $this->attributes()['latitude']]),
-            'longitude.required' => __('messages.required', ['attribute' => $this->attributes()['longitude']]),
+            'description.required' => __('messages.required', ['attribute' => $this->attributes()['description']]),
         ];
     }
 }

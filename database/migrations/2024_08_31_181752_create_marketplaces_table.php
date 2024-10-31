@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->decimal('latitude', 10, 8)->index('marketplace_latitude');
             $table->decimal('longitude', 11, 8)->index('marketplace_longitude');
             $table->string('password');
+            $table->string('description')->nullable();
+            $table->json('rate_and_review')->nullable();
             $table->string('reset_password')->nullable();
             $table->rememberToken();
             $table->timestamps();

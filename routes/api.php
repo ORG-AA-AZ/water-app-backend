@@ -31,7 +31,7 @@ Route::prefix('marketplace')->group(function () {
 Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(function () {
     // Routes available to authenticated users
     Route::get('marketplaces', [MarketplaceController::class, 'index']);
-
+    
     // User Routes with 'user' prefix
     Route::prefix('user')->group(function () {
         Route::post('reset-password', [UserController::class, 'resetUserPassword']);
@@ -41,10 +41,9 @@ Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(functi
 });
 
 // Protected Routes with 'auth:sanctum' and 'EnsureMarketplaceIsActive' middlewares
-Route::middleware(['auth:sanctum', EnsureMarketplaceIsActive::class])->group(function () {
+Route::middleware(['auth:sanctum', EnsureMarketplaceIsActive::class])->prefix('marketplace')->group(function () {
     // Marketplace Routes with 'marketplace' prefix
-    Route::prefix('marketplace')->group(function () {
-        Route::delete('logout', [MarketplaceController::class, 'logoutMarketplace']);
-        Route::get('add-new-product', [MarketplaceController::class, 'addProduct']);
-    });
+    Route::delete('logout', [MarketplaceController::class, 'logoutMarketplace']);
+    Route::post('set-description', [MarketplaceController::class, 'setDescription']);
+    Route::get('add-new-product', [MarketplaceController::class, 'addProduct']);
 });

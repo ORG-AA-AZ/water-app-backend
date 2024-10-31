@@ -32,12 +32,14 @@ class MarketplaceFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'national_id' => fake()->numberBetween(1000000000, 9999999999),
-            'mobile' => fake()->numberBetween(1000000000, 9999999999),
+            'national_id' => (string) fake()->numberBetween(1000000000, 9999999999),
+            'mobile' => (string) fake()->numberBetween(1000000000, 9999999999),
             'is_active' => true,
             'password' => static::$password ??= Hash::make('password'),
-            'latitude' => fake()->latitude(),
-            'longitude' => fake()->longitude(),
+            'latitude' => (string) fake()->latitude(),
+            'longitude' => (string) fake()->longitude(),
+            'description' => fake()->text(50),
+            "rate_and_review" => null
         ];
     }
 

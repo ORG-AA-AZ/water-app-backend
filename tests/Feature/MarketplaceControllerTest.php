@@ -136,4 +136,24 @@ class MarketplaceControllerTest extends TestCase
                 'message' => 'Unauthenticated.',
             ]);
     }
+
+    public function testSetDescription(): void
+    {
+        $this->faker = Factory::create();
+        $marketplace = MarketplaceFactory::new()->createOne();
+
+        $data = [
+            'national_id' => $marketplace->national_id,
+            'description' => $marketplace->description,
+        ];
+
+        // $description = App::getLocale() === 'ar' ? 'الوصف' : 'description';
+
+        $this->actingAs($marketplace)
+            ->postJson('api/marketplace/set-description', $data)
+            ->assertOk()
+            ->assertJson([
+                'message' => __('messages.description_updated'),
+            ]);
+    }
 }
