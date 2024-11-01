@@ -29,4 +29,5 @@ return [
     'fail_process' => 'Process failed. Please try again later.',
     'inactive_marketplace' => 'The account is inactive.',
     'description_updated' => 'The description is updated.',
+    'feedback_sent' => 'The feedback was sent successfully.',
 ];

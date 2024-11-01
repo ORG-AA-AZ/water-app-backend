@@ -18,6 +18,8 @@ class Marketplace extends Authenticatable
         'password',
         'latitude',
         'longitude',
+        'description',
+        'rate_and_review',
     ];
 
     /**

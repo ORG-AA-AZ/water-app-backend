@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class UserController extends Controller
+class UserController
 {
     public function __construct(
         private ServiceTwilioSms $sms_service,
@@ -181,6 +180,25 @@ class UserController extends Controller
             $request->user->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
 
             return response()->json(['message' => __('messages.location_located')]);
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'error' => __('messages.fail_process'),
+            ], 422);
+        }
+    }
+    
+    public function setRateAndReview(MarketplaceRateAndReviewRequest $request)
+    {
+        $data = [
+            'user_id' => $request->user->id,
+            'rate' => $request->input('rate'),
+            'review' => $request->input('review'),
+        ];
+        try {
+            $request->marketplace->update(['rate_and_review' => json_encode($data)]);
+            return response()->json(['message' => __('messages.feedback_sent')]);
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
 

@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(functi
         Route::post('reset-password', [UserController::class, 'resetUserPassword']);
         Route::delete('logout', [UserController::class, 'logoutUser']);
         Route::post('set-location', [UserController::class, 'setLocation']);
+        Route::post('set-rate-and-review', [UserController::class, 'setRateAndReview']);
     });
 });
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\Marketplace\MarketplaceResetPasswordRequest;
 use App\Models\Marketplace;
 use App\Resources\MarketplaceResource;
 use Database\Factories\MarketplaceFactory;
+use Database\Factories\UserFactory;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,7 +25,7 @@ use Tests\TestCase;
 
 class MarketplaceControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     private Generator $faker;
 
     public function testStoreMarketplace(): void

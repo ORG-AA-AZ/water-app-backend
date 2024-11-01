@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Marketplace;
 
-use App\Http\Controllers\Controller;
 use App\Models\Marketplace;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class MarketplaceController extends Controller
+class MarketplaceController
 {
     public function __construct(
         private ServiceTwilioSms $sms_service,
