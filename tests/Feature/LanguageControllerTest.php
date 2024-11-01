@@ -33,7 +33,7 @@ class LanguageControllerTest extends TestCase
         $this->postJson('/api/set-language', ['lang' => 'invalid_lang'])
             ->assertStatus(422)
             ->assertJson([
-                'message' => __('messages.in', ['attribute' => 'اللغة'])
+                'message' => __('messages.in', ['attribute' => 'اللغة']),
             ]);
 
         $this->assertEquals('ar', App::getLocale());
@@ -44,7 +44,7 @@ class LanguageControllerTest extends TestCase
         $this->postJson('/api/set-language', [])
             ->assertStatus(422)
             ->assertJson([
-                'message' => __('messages.required', ['attribute' => 'language'])
+                'message' => __('messages.required', ['attribute' => 'language']),
             ]);
 
         $this->assertEquals('en', App::getLocale());
