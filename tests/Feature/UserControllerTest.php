@@ -320,7 +320,7 @@ class UserControllerTest extends TestCase
                 'error' => __('messages.fail_process'),
             ]);
     }
-    
+
     public function testResetPassword(): void
     {
         $this->faker = Factory::create();
@@ -457,7 +457,7 @@ class UserControllerTest extends TestCase
             ->assertJson(['message' => __('messages.location_located')]);
 
         App::setLocale('ar');
-    
+
         $this->actingAs($user)
             ->postJson('api/user/set-location', $data)
             ->assertOk()
@@ -503,7 +503,7 @@ class UserControllerTest extends TestCase
                 ],
             ]);
     }
-    
+
     public function testSetReviewAsUser(): void
     {
         $this->faker = Factory::create();
@@ -525,7 +525,7 @@ class UserControllerTest extends TestCase
             ]);
 
         App::setLocale('ar');
-    
+
         $this->actingAs($user)
             ->postJson('api/user/set-rate-and-review', $data)
             ->assertOk()
@@ -533,7 +533,7 @@ class UserControllerTest extends TestCase
                 'message' => __('messages.feedback_sent'),
             ]);
     }
-    
+
     public function testFailSetReviewToMarketplaceIfUnauthorized(): void
     {
         $this->faker = Factory::create();

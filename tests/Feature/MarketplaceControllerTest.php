@@ -8,7 +8,6 @@ use App\Http\Controllers\Marketplace\MarketplaceResetPasswordRequest;
 use App\Models\Marketplace;
 use App\Resources\MarketplaceResource;
 use Database\Factories\MarketplaceFactory;
-use Database\Factories\UserFactory;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;

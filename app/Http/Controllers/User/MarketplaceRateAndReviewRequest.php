@@ -14,15 +14,14 @@ class MarketplaceRateAndReviewRequest extends FormRequest
 
     public function authorize(): bool
     {
-        if(is_null(Marketplace::where('national_id', $this->input('national_id'))->first()))
-        {
+        if (is_null(Marketplace::where('national_id', $this->input('national_id'))->first())) {
             return false;
         }
-    
-        if($this->user() instanceof User)
-        {
+
+        if ($this->user() instanceof User) {
             $this->marketplace = Marketplace::where('national_id', $this->input('national_id'))->first();
             $this->user = User::where('mobile', $this->input('mobile'))->first();
+
             return true;
         } else {
             return false;

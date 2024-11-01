@@ -188,7 +188,7 @@ class UserController
             ], 422);
         }
     }
-    
+
     public function setRateAndReview(MarketplaceRateAndReviewRequest $request)
     {
         $data = [
@@ -198,6 +198,7 @@ class UserController
         ];
         try {
             $request->marketplace->update(['rate_and_review' => json_encode($data)]);
+
             return response()->json(['message' => __('messages.feedback_sent')]);
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
