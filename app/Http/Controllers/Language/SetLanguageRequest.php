@@ -35,8 +35,8 @@ class SetLanguageRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'lang.required' => __('messages.required'),
-            'lang.in' => __('messages.in'),
+            'lang.required' => __('messages.required', ['attribute' => $this->attributes()['lang']]),
+            'lang.in' => __('messages.in', ['attribute' => $this->attributes()['lang']]),
         ];
     }
 }
