@@ -24,7 +24,7 @@ use Tests\TestCase;
 
 class MarketplaceControllerTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
     private Generator $faker;
 
     public function testStoreMarketplace(): void
