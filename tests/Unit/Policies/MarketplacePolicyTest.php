@@ -4,10 +4,13 @@ namespace Tests\Unit\Policies;
 
 use App\Policies\MarketplacePolicy;
 use Database\Factories\MarketplaceFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class MarketplacePolicyTest extends TestCase
 {
+    use RefreshDatabase;
+    
     public function testViewPolicyAllowsOwnMarketplace()
     {
         $auth_marketplace = MarketplaceFactory::new()->createOne();
