@@ -45,7 +45,7 @@ class UserControllerTest extends TestCase
     public function testUnverifiedUserTryToMakeSomehtingNeedsVerify(): void
     {
         $user = UserFactory::new()->createOne();
-        
+
         // Any route needs the user to be verified
         $this->actingAs($user)
             ->postJson('api/user/set-location', [])

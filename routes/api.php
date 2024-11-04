@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/set-language', [SetLanguage::class, 'setLanguage']);
 
-
 Route::prefix('user')->group(function () {
     Route::post('register', [UserController::class, 'registerUser']);
     Route::post('forget-password', [UserController::class, 'forgetUserPassword']);
@@ -17,7 +16,6 @@ Route::prefix('user')->group(function () {
     Route::post('resend-verify-code', [UserController::class, 'resendVerificationCode']);
     Route::post('login', [UserController::class, 'loginUser']);
 });
-
 
 Route::prefix('marketplace')->group(function () {
     Route::post('register', [MarketplaceController::class, 'registerMarketplace']);
@@ -27,7 +25,6 @@ Route::prefix('marketplace')->group(function () {
     Route::post('resend-verify-code', [MarketplaceController::class, 'setNewVerifyCodeAndSendToUser']);
     Route::post('login', [MarketplaceController::class, 'loginMarketplace']);
 });
-
 
 Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(function () {
     Route::get('marketplaces', [MarketplaceController::class, 'index']);
@@ -39,7 +36,6 @@ Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(functi
         Route::post('set-rate-and-review', [UserController::class, 'setRateAndReview']);
     });
 });
-
 
 Route::middleware(['auth:sanctum', EnsureMarketplaceIsActive::class])->prefix('marketplace')->group(function () {
     Route::delete('logout', [MarketplaceController::class, 'logoutMarketplace']);

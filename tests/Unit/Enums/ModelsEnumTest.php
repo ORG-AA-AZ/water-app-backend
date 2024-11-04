@@ -3,8 +3,8 @@
 namespace Tests\Unit\Enums;
 
 use App\Enums\ModelsEnum;
-use App\Models\User;
 use App\Models\Marketplace;
+use App\Models\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\TestCase;
 

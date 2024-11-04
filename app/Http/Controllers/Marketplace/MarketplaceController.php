@@ -52,7 +52,7 @@ class MarketplaceController
     public function loginMarketplace(MarketplaceLoginRequest $request)
     {
         $marketplace = Marketplace::where('national_id', $request->input('national_id'))->first();
-        
+
         if (! $marketplace || ! $marketplace->is_active) {
             Log::error(new \Exception(__('messages.national_id_not_registered')));
 
@@ -60,7 +60,7 @@ class MarketplaceController
                 'error' => __('messages.national_id_not_registered'),
             ], 401);
         }
-        
+
         $login_using_password = Auth::guard('marketplace')->attempt(['national_id' => $request->input('national_id'), 'password' => $request->input('password')]);
         $login_using_reset_password = Hash::check($request->input('password'), $marketplace->reset_password);
 

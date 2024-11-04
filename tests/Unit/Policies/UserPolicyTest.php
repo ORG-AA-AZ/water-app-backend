@@ -4,8 +4,8 @@ namespace Tests\Unit\Policies;
 
 use App\Policies\UserPolicy;
 use Database\Factories\UserFactory;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class UserPolicyTest extends TestCase
 {

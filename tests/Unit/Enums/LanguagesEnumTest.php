@@ -20,7 +20,7 @@ class LanguagesEnumTest extends TestCase
         $cases = LanguagesEnum::cases();
 
         $this->assertCount(2, $cases);
-        $this->assertSame(['en', 'ar'], array_map(fn($case) => $case->value, $cases));
+        $this->assertSame(['en', 'ar'], array_map(fn ($case) => $case->value, $cases));
     }
 
     public function testCanInstantiateFromValue()

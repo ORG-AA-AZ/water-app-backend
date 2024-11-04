@@ -37,11 +37,10 @@ class MarketplaceControllerTest extends TestCase
     use RefreshDatabase;
     private Generator $faker;
 
-    
     public function testInactiveMarketplaceTryToMakeSomehtingNeedsToBeActive(): void
     {
         $marketplace = MarketplaceFactory::new()->setInactive()->createOne();
-        
+
         // Any route needs the marketplace to be active
         $this->actingAs($marketplace)
             ->postJson('api/marketplace/set-location', [])
@@ -153,7 +152,6 @@ class MarketplaceControllerTest extends TestCase
             ]);
     }
 
-    
     public function testLoginUser(): void
     {
         $marketplace = MarketplaceFactory::new()->createOne();
