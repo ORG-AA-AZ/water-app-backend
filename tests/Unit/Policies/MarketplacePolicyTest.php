@@ -10,7 +10,7 @@ use Tests\TestCase;
 class MarketplacePolicyTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function testViewPolicyAllowsOwnMarketplace()
     {
         $auth_marketplace = MarketplaceFactory::new()->createOne();
