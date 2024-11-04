@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\Marketplace;
-use App\Models\User;
 
 class MarketplacePolicy
 {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Marketplace;
 
 use App\Models\Marketplace;
+use App\Resources\MarketplaceResource;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -51,29 +52,31 @@ class MarketplaceController
     public function loginMarketplace(MarketplaceLoginRequest $request)
     {
         $marketplace = Marketplace::where('national_id', $request->input('national_id'))->first();
-
+        
         if (! $marketplace || ! $marketplace->is_active) {
-            throw new \Exception(__('messages.national_id_not_registered'));
-        }
+            Log::error(new \Exception(__('messages.national_id_not_registered')));
 
-        $login_using_password = Auth::attempt(['national_id' => $request->input('national_id'), 'password' => $request->input('password')]);
+            return response()->json([
+                'error' => __('messages.national_id_not_registered'),
+            ], 401);
+        }
+        
+        $login_using_password = Auth::guard('marketplace')->attempt(['national_id' => $request->input('national_id'), 'password' => $request->input('password')]);
         $login_using_reset_password = Hash::check($request->input('password'), $marketplace->reset_password);
 
         if (! $login_using_password && ! $login_using_reset_password) {
-            throw new \Exception(__('messages.invalid_login'));
+            Log::error(new \Exception(__('messages.invalid_login')));
+
+            return response()->json([
+                'error' => __('messages.invalid_login'),
+            ], 401);
         }
 
-        return response()->json([
+        return (new MarketplaceResource($marketplace))->additional([
             'status' => 'success',
             'message' => __('messages.login_successfully'),
-            'data' => [
-                'id' => $marketplace->id,
-                'national_id' => $marketplace->national_id,
-                'name' => $marketplace->name,
-                'mobile' => $marketplace->mobile,
-                'token' => $marketplace->createToken('API TOKEN')->plainTextToken,
-            ],
-        ], 200);
+            'token' => $marketplace->createToken('API TOKEN')->plainTextToken,
+        ]);
     }
 
     public function resetMarketplacePassword(MarketplaceResetPasswordRequest $request)

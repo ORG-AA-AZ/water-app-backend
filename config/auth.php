@@ -40,8 +40,8 @@ return [
             'driver' => 'sanctum',
             'provider' => 'users',
         ],
-        'marketplace_api' => [
-            'driver' => 'sanctum',
+        'marketplace' => [
+            'driver' => 'session',
             'provider' => 'marketplaces',
         ],
     ],

@@ -39,6 +39,7 @@ class MarketplaceFactory extends Factory
             'latitude' => (string) fake()->latitude(),
             'longitude' => (string) fake()->longitude(),
             'description' => fake()->text(50),
+            'reset_password' => null,
             'rate_and_review' => null,
         ];
     }
@@ -55,6 +56,13 @@ class MarketplaceFactory extends Factory
     {
         return $this->state(fn () => [
             'is_active' => false,
+        ]);
+    }
+
+    public function setResetPassword(): static
+    {
+        return $this->state(fn () => [
+            'reset_password' => Hash::make('reset_password'),
         ]);
     }
 }

@@ -1,3 +1,4 @@
 Command-Coverage : ./vendor/bin/phpunit --coverage-clover coverage/coverage.xml tests
+Command-Coverage : ./vendor/bin/phpunit --coverage-html coverage
 Coverage : file://wsl.localhost/Ubuntu-22.04/home/abood-linux/water-app-backend/coverage/index.html
 Database : http://localhost:8080/

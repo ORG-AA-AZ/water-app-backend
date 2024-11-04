@@ -15,7 +15,6 @@ class MarketplaceResource extends JsonResource
             'national_id' => $this->national_id,
             'name' => $this->name,
             'mobile' => $this->mobile,
-            'location' => $this->location,
         ];
     }
 }

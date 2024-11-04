@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use App\Resources\UserResource;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -62,16 +63,11 @@ class UserController
             return response()->json(['error' => __('messages.invalid_login')], 401);
         }
 
-        return response()->json([
+        return (new UserResource($user))->additional([
             'status' => 'success',
             'message' => __('messages.login_successfully'),
-            'data' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'mobile' => $user->mobile,
-                'token' => $user->createToken('API TOKEN')->plainTextToken,
-            ],
-        ], 200);
+            'token' => $user->createToken('API TOKEN')->plainTextToken,
+        ]);
     }
 
     public function resetUserPassword(UserResetPasswordRequest $request)

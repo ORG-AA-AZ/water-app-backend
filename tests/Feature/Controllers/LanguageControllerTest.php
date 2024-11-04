@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
 use App\Enums\LanguagesEnum;
 use App\Http\Controllers\Language\SetLanguage;
