@@ -14,9 +14,4 @@ class LanguageServiceProvider extends ServiceProvider
         Session::put('locale', $locale);
         App::setLocale($locale);
     }
-
-    public function register()
-    {
-        // No bindings needed here
-    }
 }
