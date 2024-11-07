@@ -4,9 +4,9 @@ namespace Tests\Unit\Providers;
 
 use App\Models\Marketplace;
 use App\Models\User;
-use App\Providers\AuthServiceProvider;
 use App\Policies\MarketplacePolicy;
 use App\Policies\UserPolicy;
+use App\Providers\AuthServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Tests\TestCase;
 

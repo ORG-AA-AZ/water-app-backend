@@ -16,11 +16,11 @@ class AppServiceProvider extends ServiceProvider
     {
         if (! $this->app->environment('production')) {
             $this->app->singleton(ServiceTwilioSms::class, FakeSmsService::class);
+
             return;
         }
 
         $this->app->singleton(ServiceTwilioSms::class, SmsService::class);
-
     }
 
     /**
