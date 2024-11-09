@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
-use App\Models\UserLocation;
 use App\Resources\UserResource;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;

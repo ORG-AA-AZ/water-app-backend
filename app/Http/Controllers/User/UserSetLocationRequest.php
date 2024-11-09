@@ -23,7 +23,7 @@ class UserSetLocationRequest extends FormRequest
     {
         return [
             'mobile' => ['required', 'string', 'regex:/^\d{10}$/'],
-            'place' => ['required', 'string', Rule::in(PlaceOfLocation::cases()),],
+            'place' => ['required', 'string', Rule::in(PlaceOfLocation::cases())],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
         ];

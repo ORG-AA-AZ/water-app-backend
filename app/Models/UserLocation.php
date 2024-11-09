@@ -8,14 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class UserLocation extends Model
 {
     use HasFactory;
-
     protected $table = 'user_locations';
-
     protected $fillable = [
         'home_latitude', 'home_longitude',
         'work_latitude', 'work_longitude',
         'other_latitude', 'other_longitude',
-        'user_id'
+        'user_id',
     ];
 
     public function user()
