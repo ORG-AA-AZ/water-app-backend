@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Marketplace extends Model
+class Marketplace extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, Authorizable; // Add Authorizable
     protected $fillable = [
         'name',
         'mobile',
@@ -17,6 +18,8 @@ class Marketplace extends Model
         'password',
         'latitude',
         'longitude',
+        'description',
+        'rate_and_review',
     ];
 
     /**

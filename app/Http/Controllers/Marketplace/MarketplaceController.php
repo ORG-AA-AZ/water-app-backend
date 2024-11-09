@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Marketplace;
 
-use App\Http\Controllers\Controller;
 use App\Models\Marketplace;
+use App\Resources\MarketplaceResource;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class MarketplaceController extends Controller
+class MarketplaceController
 {
     public function __construct(
         private ServiceTwilioSms $sms_service,
@@ -54,27 +54,29 @@ class MarketplaceController extends Controller
         $marketplace = Marketplace::where('national_id', $request->input('national_id'))->first();
 
         if (! $marketplace || ! $marketplace->is_active) {
-            throw new \Exception(__('messages.national_id_not_registered'));
+            Log::error(new \Exception(__('messages.national_id_not_registered')));
+
+            return response()->json([
+                'error' => __('messages.national_id_not_registered'),
+            ], 401);
         }
 
-        $login_using_password = Auth::attempt(['national_id' => $request->input('national_id'), 'password' => $request->input('password')]);
+        $login_using_password = Auth::guard('marketplace')->attempt(['national_id' => $request->input('national_id'), 'password' => $request->input('password')]);
         $login_using_reset_password = Hash::check($request->input('password'), $marketplace->reset_password);
 
         if (! $login_using_password && ! $login_using_reset_password) {
-            throw new \Exception(__('messages.invalid_login'));
+            Log::error(new \Exception(__('messages.invalid_login')));
+
+            return response()->json([
+                'error' => __('messages.invalid_login'),
+            ], 401);
         }
 
-        return response()->json([
+        return (new MarketplaceResource($marketplace))->additional([
             'status' => 'success',
             'message' => __('messages.login_successfully'),
-            'data' => [
-                'id' => $marketplace->id,
-                'national_id' => $marketplace->national_id,
-                'name' => $marketplace->name,
-                'mobile' => $marketplace->mobile,
-                'token' => $marketplace->createToken('API TOKEN')->plainTextToken,
-            ],
-        ], 200);
+            'token' => $marketplace->createToken('API TOKEN')->plainTextToken,
+        ]);
     }
 
     public function resetMarketplacePassword(MarketplaceResetPasswordRequest $request)
@@ -137,10 +139,24 @@ class MarketplaceController extends Controller
     public function setLocation(MarketplaceSetLocationRequest $request)
     {
         try {
-            $entity = Marketplace::where('national_id', $request->input('national_id'))->first();
-            $entity->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
+            $request->marketplace->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
 
             return response()->json(['message' => __('messages.location_located')]);
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'error' => __('messages.fail_process'),
+            ], 422);
+        }
+    }
+
+    public function setDescription(MarketplaceDescriptionRequest $request)
+    {
+        try {
+            $request->marketplace->update(['description' => $request->input('description')]);
+
+            return response()->json(['message' => __('messages.description_updated')]);
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
 

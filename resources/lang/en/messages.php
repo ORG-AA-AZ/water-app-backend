@@ -28,4 +28,6 @@ return [
     'invaild_new_verification' => 'Failed to send new varification code. Check if mobile number is registered.',
     'fail_process' => 'Process failed. Please try again later.',
     'inactive_marketplace' => 'The account is inactive.',
+    'description_updated' => 'The description is updated.',
+    'feedback_sent' => 'The feedback was sent successfully.',
 ];

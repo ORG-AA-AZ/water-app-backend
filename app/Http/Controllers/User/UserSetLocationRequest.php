@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
 
 class UserSetLocationRequest extends FormRequest
 {
+    public User $user;
+
+    public function authorize(): bool
+    {
+        $this->user = User::where('mobile', $this->input('mobile'))->first();
+
+        return $this->user()->can('update', $this->user);
+    }
+
     public function rules(): array
     {
         return [

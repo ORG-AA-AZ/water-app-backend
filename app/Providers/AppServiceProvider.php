@@ -14,17 +14,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Use the real SmsService by default
-        $this->app->singleton(ServiceTwilioSms::class, function ($app) {
-            return new SmsService();
-        });
-
-        // In test environment, use the FakeSmsService
         if (! $this->app->environment('production')) {
-            $this->app->singleton(ServiceTwilioSms::class, function ($app) {
-                return new FakeSmsService();
-            });
+            $this->app->singleton(ServiceTwilioSms::class, FakeSmsService::class);
+
+            return;
         }
+
+        $this->app->singleton(ServiceTwilioSms::class, SmsService::class);
     }
 
     /**

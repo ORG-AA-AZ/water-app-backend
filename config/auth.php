@@ -36,9 +36,13 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
+        'api' => [
+            'driver' => 'sanctum',
             'provider' => 'users',
+        ],
+        'marketplace' => [
+            'driver' => 'session',
+            'provider' => 'marketplaces',
         ],
     ],
 
@@ -62,13 +66,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'marketplaces' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Marketplace::class,
+        ],
     ],
 
     /*

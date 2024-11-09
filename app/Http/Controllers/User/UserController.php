@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Resources\UserResource;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class UserController extends Controller
+class UserController
 {
     public function __construct(
         private ServiceTwilioSms $sms_service,
@@ -63,22 +63,17 @@ class UserController extends Controller
             return response()->json(['error' => __('messages.invalid_login')], 401);
         }
 
-        return response()->json([
+        return (new UserResource($user))->additional([
             'status' => 'success',
             'message' => __('messages.login_successfully'),
-            'data' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'mobile' => $user->mobile,
-                'token' => $user->createToken('API TOKEN')->plainTextToken,
-            ],
-        ], 200);
+            'token' => $user->createToken('API TOKEN')->plainTextToken,
+        ]);
     }
 
     public function resetUserPassword(UserResetPasswordRequest $request)
     {
         try {
-            User::where('mobile', $request->input('mobile'))->first()->update(['password' => $request->input('password')]);
+            $request->user->where('mobile', $request->input('mobile'))->first()->update(['password' => $request->input('password')]);
 
             return response()->json([
                 'status' => 'success',
@@ -178,10 +173,29 @@ class UserController extends Controller
     public function setLocation(UserSetLocationRequest $request)
     {
         try {
-            $user = User::where('mobile', $request->input('mobile'))->first();
-            $user->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
+            $request->user->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
 
             return response()->json(['message' => __('messages.location_located')]);
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'error' => __('messages.fail_process'),
+            ], 422);
+        }
+    }
+
+    public function setRateAndReview(MarketplaceRateAndReviewRequest $request)
+    {
+        $data = [
+            'user_id' => $request->user->id,
+            'rate' => $request->input('rate'),
+            'review' => $request->input('review'),
+        ];
+        try {
+            $request->marketplace->update(['rate_and_review' => json_encode($data)]);
+
+            return response()->json(['message' => __('messages.feedback_sent')]);
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
 

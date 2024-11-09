@@ -1,16 +1,20 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers;
 
+use App\Http\Controllers\User\MarketplaceRateAndReviewRequest;
 use App\Http\Controllers\User\NewVerifyCodeRequest;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserForgetPasswordRequest;
 use App\Http\Controllers\User\UserLoginRequest;
 use App\Http\Controllers\User\UserRegisterRequest;
 use App\Http\Controllers\User\UserResetPasswordRequest;
+use App\Http\Controllers\User\UserSetLocationRequest;
 use App\Http\Controllers\User\VerifyRequest;
+use App\Http\Middleware\EnsureMobileIsVerified;
 use App\Models\User;
 use App\Resources\UserResource;
+use Database\Factories\MarketplaceFactory;
 use Database\Factories\UserFactory;
 use Faker\Factory;
 use Faker\Generator;
@@ -29,15 +33,45 @@ use Tests\TestCase;
 #[CoversClass(UserResource::class)]
 #[CoversClass(VerifyRequest::class)]
 #[CoversClass(NewVerifyCodeRequest::class)]
+#[CoversClass(UserSetLocationRequest::class)]
+#[CoversClass(MarketplaceRateAndReviewRequest::class)]
+#[CoversClass(EnsureMobileIsVerified::class)]
 
 class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
     private Generator $faker;
 
+    public function testUnverifiedUserTryToMakeSomehtingNeedsVerify(): void
+    {
+        $user = UserFactory::new()->createOne();
+
+        // Any route needs the user to be verified
+        $this->actingAs($user)
+            ->postJson('api/user/set-location', [])
+            ->assertStatus(403)
+            ->assertJson(['message' => __('messages.mobile_not_verified')]);
+    }
+
     public function testRegisterUser(): void
     {
         $this->faker = Factory::create();
+
+        $data = [
+            'name' => $name = $this->faker->name(),
+            'mobile' => $mobile = (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
+            'password' => $password = Str::random(),
+            'password_confirmation' => $password,
+        ];
+
+        $this->postJson('/api/user/register', $data)
+            ->assertStatus(201)
+            ->assertJson([
+                'status' => 'success',
+                'message' => __('messages.mobile_registered_successfully'),
+            ]);
+
+        App::setLocale('ar');
 
         $data = [
             'name' => $name = $this->faker->name(),
@@ -87,6 +121,17 @@ class UserControllerTest extends TestCase
                     'mobile' => [__('messages.unique', ['attribute' => $mobile_attribute])],
                 ],
             ]);
+
+        App::setLocale('en');
+
+        $this->postJson('/api/user/register', $data)
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => __('messages.unique', ['attribute' => $mobile_attribute]),
+                'errors' => [
+                    'mobile' => [__('messages.unique', ['attribute' => $mobile_attribute])],
+                ],
+            ]);
     }
 
     public function testFailRegisterUserNoneConfirmedPassword(): void
@@ -99,6 +144,17 @@ class UserControllerTest extends TestCase
             'password' => Str::random(),
             'password_confirmation' => Str::random(),
         ];
+
+        $this->postJson('/api/user/register', $data)
+            ->assertStatus(422)
+            ->assertJson([
+                'message' => 'The password confirmation does not match.',
+                'errors' => [
+                    'password' => ['The password confirmation does not match.'],
+                ],
+            ]);
+
+        App::setLocale('ar');
 
         $this->postJson('/api/user/register', $data)
             ->assertStatus(422)
@@ -127,8 +183,26 @@ class UserControllerTest extends TestCase
                     'id',
                     'name',
                     'mobile',
-                    'token',
                 ],
+                'status',
+                'message',
+                'token',
+            ]);
+
+        App::setLocale('ar');
+
+        $this->postJson('/api/user/login', $data)
+            ->assertOk()
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'mobile',
+                ],
+                'status',
+                'message',
+                'token',
             ]);
     }
 
@@ -149,8 +223,26 @@ class UserControllerTest extends TestCase
                     'id',
                     'name',
                     'mobile',
-                    'token',
                 ],
+                'status',
+                'message',
+                'token',
+            ]);
+
+        App::setLocale('ar');
+
+        $this->postJson('/api/user/login', $data)
+            ->assertOk()
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'name',
+                    'mobile',
+                ],
+                'status',
+                'message',
+                'token',
             ]);
     }
 
@@ -162,6 +254,14 @@ class UserControllerTest extends TestCase
             'mobile' => $user->mobile,
             'password' => Str::random(8),
         ];
+
+        $this->postJson('/api/user/login', $data)
+            ->assertStatus(401)
+            ->assertJson([
+                'error' => __('messages.invalid_login'),
+            ]);
+
+        App::setLocale('ar');
 
         $this->postJson('/api/user/login', $data)
             ->assertStatus(401)
@@ -184,6 +284,96 @@ class UserControllerTest extends TestCase
             ->assertJson([
                 'error' => __('messages.mobile_not_verified'),
             ]);
+
+        App::setLocale('ar');
+
+        $this->postJson('/api/user/login', $data)
+            ->assertStatus(401)
+            ->assertJson([
+                'error' => __('messages.mobile_not_verified'),
+            ]);
+    }
+
+    public function testForgetPassword(): void
+    {
+        $user = UserFactory::new()->verified()->createOne();
+
+        $data = [
+            'mobile' => $user->mobile,
+        ];
+
+        $this->postJson('/api/user/forget-password', $data)
+            ->assertOk()
+            ->assertJson([
+                'status' => 'success',
+                'message' => __('messages.sent_new_password'),
+            ]);
+
+        App::setLocale('ar');
+
+        $this->postJson('/api/user/forget-password', $data)
+            ->assertOk()
+            ->assertJson([
+                'status' => 'success',
+                'message' => __('messages.sent_new_password'),
+            ]);
+    }
+
+    public function testForgetPasswordForNoneExistUser(): void
+    {
+        $this->faker = Factory::create();
+
+        $data = [
+            'mobile' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
+        ];
+
+        $this->postJson('/api/user/forget-password', $data)
+            ->assertStatus(401)
+            ->assertJson([
+                'error' => __('messages.fail_process'),
+            ]);
+
+        App::setLocale('ar');
+
+        $this->postJson('/api/user/forget-password', $data)
+            ->assertStatus(401)
+            ->assertJson([
+                'error' => __('messages.fail_process'),
+            ]);
+    }
+
+    public function testResetPassword(): void
+    {
+        $this->faker = Factory::create();
+        $user = UserFactory::new()->verified()->createOne();
+
+        $data = [
+            'mobile' => $user->mobile,
+            'password' => $password = Str::random(),
+            'password_confirmation' => $password,
+        ];
+
+        $this->actingAs($user)
+            ->postJson('/api/user/reset-password', $data)
+            ->assertOk()
+            ->assertJson([
+                'status' => 'success',
+                'message' => __('messages.reset_password_successfully'),
+            ]);
+
+        App::setLocale('ar');
+
+        $this->actingAs($user)
+            ->postJson('/api/user/reset-password', $data)
+            ->assertOk()
+            ->assertJson([
+                'status' => 'success',
+                'message' => __('messages.reset_password_successfully'),
+            ]);
+
+        $user = User::where('mobile', $user->mobile)->first();
+
+        $this->assertTrue(Hash::check($password, $user->password));
     }
 
     public function testVerifyMobileNumber(): void
@@ -197,7 +387,22 @@ class UserControllerTest extends TestCase
 
         $this->postJson('/api/user/verify-mobile', $data)
             ->assertOk()
-            ->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => __('messages.mobile_verified_successfully'),
+            ]);
+
+        App::setLocale('ar');
+
+        $user = UserFactory::new()->createOne();
+
+        $data = [
+            'mobile' => $user->mobile,
+            'code' => $user->mobile_verification_code,
+        ];
+
+        $this->postJson('/api/user/verify-mobile', $data)
+            ->assertOk()
             ->assertJson([
                 'status' => 'success',
                 'message' => __('messages.mobile_verified_successfully'),
@@ -214,7 +419,15 @@ class UserControllerTest extends TestCase
 
         $this->postJson('/api/user/resend-verify-code', $data)
             ->assertOk()
-            ->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'message' => __('messages.new_verification_code_sent'),
+            ]);
+
+        App::setLocale('ar');
+
+        $this->postJson('/api/user/resend-verify-code', $data)
+            ->assertOk()
             ->assertJson([
                 'status' => 'success',
                 'message' => __('messages.new_verification_code_sent'),
@@ -227,7 +440,7 @@ class UserControllerTest extends TestCase
         $user->createToken('API TOKEN')->plainTextToken;
 
         $this->actingAs($user)->deleteJson('/api/user/logout')
-            ->assertStatus(200)
+            ->assertOk()
             ->assertJson([
                 'status' => 'success',
                 'message' => __('messages.logout'),
@@ -258,6 +471,13 @@ class UserControllerTest extends TestCase
 
         $this->assertNotEquals($user->latitude, $data['latitude']);
         $this->assertNotEquals($user->longitude, $data['longitude']);
+
+        $this->actingAs($user)
+            ->postJson('api/user/set-location', $data)
+            ->assertOk()
+            ->assertJson(['message' => __('messages.location_located')]);
+
+        App::setLocale('ar');
 
         $this->actingAs($user)
             ->postJson('api/user/set-location', $data)
@@ -302,6 +522,56 @@ class UserControllerTest extends TestCase
                 'errors' => [
                     'longitude' => [__('messages.required', ['attribute' => $longitude_attribute])],
                 ],
+            ]);
+    }
+
+    public function testSetReviewAsUser(): void
+    {
+        $this->faker = Factory::create();
+        $user = UserFactory::new()->verified()->createOne();
+        $marketplace = MarketplaceFactory::new()->createOne();
+
+        $data = [
+            'national_id' => $marketplace->national_id,
+            'mobile' => $user->mobile,
+            'rate' => 4,
+            'review' => 'very good',
+        ];
+
+        $this->actingAs($user)
+            ->postJson('api/user/set-rate-and-review', $data)
+            ->assertOk()
+            ->assertJson([
+                'message' => __('messages.feedback_sent'),
+            ]);
+
+        App::setLocale('ar');
+
+        $this->actingAs($user)
+            ->postJson('api/user/set-rate-and-review', $data)
+            ->assertOk()
+            ->assertJson([
+                'message' => __('messages.feedback_sent'),
+            ]);
+    }
+
+    public function testFailSetReviewToMarketplaceIfUnauthorized(): void
+    {
+        $this->faker = Factory::create();
+        $user = UserFactory::new()->verified()->createOne();
+
+        $data = [
+            'national_id' => (string) $this->faker->unique()->numberBetween(1000000000, 9999999999),
+            'mobile' => $user->mobile,
+            'rate' => 4,
+            'review' => 'very good',
+        ];
+
+        $this->actingAs($user)
+            ->postJson('api/user/set-rate-and-review', $data)
+            ->assertStatus(403)
+            ->assertJson([
+                'message' => 'This action is unauthorized.',
             ]);
     }
 }
