@@ -4,10 +4,13 @@ namespace Tests\Unit\Policies;
 
 use App\Policies\UserPolicy;
 use Database\Factories\UserFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserPolicyTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testViewPolicyAllowsOwnProfile()
     {
         $auth_user = UserFactory::new()->verified()->createOne();
