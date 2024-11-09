@@ -21,8 +21,7 @@ class User extends Authenticatable
         'mobile',
         'password',
         'mobile_verification_code',
-        'latitude',
-        'longitude',
+        'locations',
     ];
 
     /**
@@ -48,6 +47,12 @@ class User extends Authenticatable
             'mobile_verified_at' => 'datetime',
             'password' => 'hashed',
             'reset_password' => 'hashed',
+            'locations' => 'array',
         ];
+    }
+
+    public function locations()
+    {
+        return $this->hasOne(UserLocation::class);
     }
 }
