@@ -40,7 +40,7 @@ use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
     private Generator $faker;
 
     public function testUnverifiedUserTryToMakeSomehtingNeedsVerify(): void
