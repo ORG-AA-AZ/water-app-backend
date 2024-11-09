@@ -31,8 +31,6 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'reset_password' => null,
             'remember_token' => Str::random(10),
-            'latitude' => null,
-            'longitude' => null,
         ];
     }
 

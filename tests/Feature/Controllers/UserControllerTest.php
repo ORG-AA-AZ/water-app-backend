@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controllers;
 
+use App\Enums\PlaceOfLocation;
 use App\Http\Controllers\User\MarketplaceRateAndReviewRequest;
 use App\Http\Controllers\User\NewVerifyCodeRequest;
 use App\Http\Controllers\User\UserController;
@@ -39,7 +40,7 @@ use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
     private Generator $faker;
 
     public function testUnverifiedUserTryToMakeSomehtingNeedsVerify(): void
@@ -465,12 +466,12 @@ class UserControllerTest extends TestCase
 
         $data = [
             'mobile' => $user->mobile,
+            'place' => PlaceOfLocation::Work,
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),
         ];
 
-        $this->assertNotEquals($user->latitude, $data['latitude']);
-        $this->assertNotEquals($user->longitude, $data['longitude']);
+        $this->assertNull($user->location);
 
         $this->actingAs($user)
             ->postJson('api/user/set-location', $data)
@@ -492,6 +493,7 @@ class UserControllerTest extends TestCase
 
         $data = [
             'mobile' => $user->mobile,
+            'place' => PlaceOfLocation::Home,
             'longitude' => $this->faker->longitude(),
         ];
 
@@ -509,6 +511,7 @@ class UserControllerTest extends TestCase
 
         $data = [
             'mobile' => $user->mobile,
+            'place' => PlaceOfLocation::Home,
             'latitude' => $this->faker->latitude(),
         ];
 

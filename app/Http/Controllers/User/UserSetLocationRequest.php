@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Enums\PlaceOfLocation;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\App;
+use Illuminate\Validation\Rule;
 
 class UserSetLocationRequest extends FormRequest
 {
@@ -21,6 +23,7 @@ class UserSetLocationRequest extends FormRequest
     {
         return [
             'mobile' => ['required', 'string', 'regex:/^\d{10}$/'],
+            'place' => ['required', 'string', Rule::in(PlaceOfLocation::cases()),],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
         ];

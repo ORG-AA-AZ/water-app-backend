@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use App\Models\UserLocation;
 use App\Resources\UserResource;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
@@ -173,7 +174,47 @@ class UserController
     public function setLocation(UserSetLocationRequest $request)
     {
         try {
-            $request->user->update(['latitude' => $request->input('latitude'), 'longitude' => $request->input('longitude')]);
+            $locations = $request->user->locations()->firstOrCreate(
+                ['user_id' => $request->user->id],
+                []
+            );
+
+            $home_latitude = $locations->home_latitude ?? null;
+            $home_longitude = $locations->home_longitude ?? null;
+
+            $work_latitude = $locations->work_latitude ?? null;
+            $work_longitude = $locations->work_longitude ?? null;
+
+            $other_latitude = $locations->other_latitude ?? null;
+            $other_longitude = $locations->other_longitude ?? null;
+
+            switch ($request->input('place')) {
+                case 'home':
+                    $home_latitude = $request->input('latitude');
+                    $home_longitude = $request->input('longitude');
+                    break;
+                case 'work':
+                    $work_latitude = $request->input('latitude');
+                    $work_longitude = $request->input('longitude');
+                    break;
+                case 'other':
+                    $other_latitude = $request->input('latitude');
+                    $other_longitude = $request->input('longitude');
+                    break;
+                default:
+                    break;
+            }
+
+            $locations->home_latitude = $home_latitude;
+            $locations->home_longitude = $home_longitude;
+
+            $locations->work_latitude = $work_latitude;
+            $locations->work_longitude = $work_longitude;
+
+            $locations->other_latitude = $other_latitude;
+            $locations->other_longitude = $other_longitude;
+
+            $locations->save();
 
             return response()->json(['message' => __('messages.location_located')]);
         } catch (\Throwable $e) {
