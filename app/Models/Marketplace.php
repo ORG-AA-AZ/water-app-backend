@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Marketplace extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Authorizable; // Add Authorizable
+    use HasApiTokens, HasFactory, Notifiable, Authorizable;
     protected $fillable = [
         'name',
         'mobile',
