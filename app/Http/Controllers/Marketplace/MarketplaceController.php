@@ -41,8 +41,6 @@ class MarketplaceController
                 ],
             ], 201);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.failed_to_register'),
             ], 401);
@@ -89,8 +87,6 @@ class MarketplaceController
                 'message' => __('messages.reset_password_successfully'),
             ], 200);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 401);
@@ -115,8 +111,6 @@ class MarketplaceController
                 'message' => __('messages.sent_new_password'),
             ], 200);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 401);
@@ -143,8 +137,6 @@ class MarketplaceController
 
             return response()->json(['message' => __('messages.location_located')]);
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 422);
@@ -158,8 +150,6 @@ class MarketplaceController
 
             return response()->json(['message' => __('messages.description_updated')]);
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 422);
