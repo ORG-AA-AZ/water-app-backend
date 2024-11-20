@@ -36,8 +36,6 @@ class UserController
                 'message' => __('messages.mobile_registered_successfully'),
             ], 201);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.failed_to_register'),
             ], 401);
@@ -80,8 +78,6 @@ class UserController
                 'message' => __('messages.reset_password_successfully'),
             ], 200);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 401);
@@ -106,8 +102,6 @@ class UserController
                 'message' => __('messages.sent_new_password'),
             ], 200);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 401);
@@ -139,8 +133,6 @@ class UserController
                 'message' => __('messages.mobile_verified_successfully'),
             ], 200);
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.invalid_verification'),
             ], 422);
@@ -162,8 +154,6 @@ class UserController
                 'message' => __('messages.new_verification_code_sent'),
             ], 200);
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.invaild_new_verification'),
             ], 422);
@@ -217,8 +207,6 @@ class UserController
 
             return response()->json(['message' => __('messages.location_located')]);
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 422);
@@ -237,8 +225,6 @@ class UserController
 
             return response()->json(['message' => __('messages.feedback_sent')]);
         } catch (\Throwable $e) {
-            Log::error($e->getMessage());
-
             return response()->json([
                 'error' => __('messages.fail_process'),
             ], 422);
