@@ -32,5 +32,5 @@ return [
     'description_updated' => 'The description is updated.',
     'feedback_sent' => 'The feedback was sent successfully.',
     'invaild_add_product' => 'Fail to add product to the marketplace',
-    'add_product_successfully' => 'Product added successfully'
+    'add_product_successfully' => 'Product added successfully',
 ];

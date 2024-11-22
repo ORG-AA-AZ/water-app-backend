@@ -30,5 +30,5 @@ return [
     'fail_process' => 'فشل العملية. الرجاء المحاولة لاحقاً.',
     'inactive_marketplace' => 'الحساب غير فعال.',
     'invaild_add_product' => 'فشل اضافة منتج للمتجر.',
-    'add_product_successfully' => 'تم اضافة المنتج'
+    'add_product_successfully' => 'تم اضافة المنتج',
 ];

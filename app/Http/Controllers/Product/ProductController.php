@@ -20,8 +20,7 @@ class ProductController
             ]);
 
             return response()->json(['message' => __('messages.add_product_successfully')]);
-
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'error' => __('messages.invaild_add_product'),
             ]);

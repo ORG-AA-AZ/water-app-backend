@@ -43,7 +43,7 @@ Route::middleware(['auth:sanctum', EnsureMarketplaceIsActive::class])->prefix('m
     Route::post('set-description', [MarketplaceController::class, 'setDescription']);
     Route::post('set-location', [MarketplaceController::class, 'setLocation']);
 
-    Route::prefix('products')->group(function() {
+    Route::prefix('products')->group(function () {
         Route::post('add-new-product', [ProductController::class, 'createProduct']);
     });
 });
