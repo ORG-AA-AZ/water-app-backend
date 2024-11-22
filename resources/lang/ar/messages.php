@@ -7,6 +7,7 @@ return [
     'regex' => 'يجب أن يحتوي :attribute على 10 أرقام بالضبط.',
     'unique' => ':attribute مسجل بالفعل.',
     'between' => 'يجب أن تكون قيمة :attribute بين :min و :max.',
+    'decimal_max' => ':attribute يجب أن يحتوي على ما يصل إلى :decimal منازل عشرية.',
 
     // Response messages
     'mobile_registered_successfully' => 'تم تسجيل حسابك بنجاح. يرجى تأكيد رقم هاتفك المحمول.',
@@ -28,4 +29,6 @@ return [
     'invaild_new_verification' => 'فشل ارسال رمز جديد. تحقق من ان رقم الهاتف مسجل في التطبيق.',
     'fail_process' => 'فشل العملية. الرجاء المحاولة لاحقاً.',
     'inactive_marketplace' => 'الحساب غير فعال.',
+    'invaild_add_product' => 'فشل اضافة منتج للمتجر.',
+    'add_product_successfully' => 'تم اضافة المنتج'
 ];

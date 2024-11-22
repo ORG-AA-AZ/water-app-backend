@@ -7,6 +7,7 @@ return [
     'regex' => 'The :attribute must contain exactly 10 digits.',
     'unique' => 'The :attribute has already been registered.',
     'between' => 'The :attribute must be between :min and :max.',
+    'decimal_max' => 'The :attribute must have up to :decimal decimal places.',
 
     // Response messages
     'mobile_registered_successfully' => 'Your account has been successfully registered. Please verify your mobile number.',
@@ -30,4 +31,6 @@ return [
     'inactive_marketplace' => 'The account is inactive.',
     'description_updated' => 'The description is updated.',
     'feedback_sent' => 'The feedback was sent successfully.',
+    'invaild_add_product' => 'Fail to add product to the marketplace',
+    'add_product_successfully' => 'Product added successfully'
 ];

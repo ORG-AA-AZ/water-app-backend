@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Language\SetLanguage;
 use App\Http\Controllers\Marketplace\MarketplaceController;
+use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\EnsureMarketplaceIsActive;
 use App\Http\Middleware\EnsureMobileIsVerified;
@@ -40,6 +41,9 @@ Route::middleware(['auth:sanctum', EnsureMobileIsVerified::class])->group(functi
 Route::middleware(['auth:sanctum', EnsureMarketplaceIsActive::class])->prefix('marketplace')->group(function () {
     Route::delete('logout', [MarketplaceController::class, 'logoutMarketplace']);
     Route::post('set-description', [MarketplaceController::class, 'setDescription']);
-    Route::get('add-new-product', [MarketplaceController::class, 'addProduct']);
     Route::post('set-location', [MarketplaceController::class, 'setLocation']);
+
+    Route::prefix('products')->group(function() {
+        Route::post('add-new-product', [ProductController::class, 'createProduct']);
+    });
 });
