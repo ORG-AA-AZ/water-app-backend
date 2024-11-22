@@ -7,7 +7,6 @@ use App\Resources\MarketplaceResource;
 use App\Services\Sms\ServiceTwilioSms;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MarketplaceController
@@ -52,8 +51,6 @@ class MarketplaceController
         $marketplace = Marketplace::where('national_id', $request->input('national_id'))->first();
 
         if (! $marketplace || ! $marketplace->is_active) {
-            Log::error(new \Exception(__('messages.national_id_not_registered')));
-
             return response()->json([
                 'error' => __('messages.national_id_not_registered'),
             ], 401);
@@ -63,8 +60,6 @@ class MarketplaceController
         $login_using_reset_password = Hash::check($request->input('password'), $marketplace->reset_password);
 
         if (! $login_using_password && ! $login_using_reset_password) {
-            Log::error(new \Exception(__('messages.invalid_login')));
-
             return response()->json([
                 'error' => __('messages.invalid_login'),
             ], 401);
