@@ -30,7 +30,7 @@ class ProductFactory extends Factory
             'image' => $this->faker->imageUrl(640, 480, 'products'),
             'price' => $this->faker->randomFloat(2, 1, 100),
             'quantity' => $this->faker->numberBetween(1, 100),
-            'factory' => $this->faker->randomDigitNotNull(),
+            'brand' => $this->faker->word(),
             'marketplace_id' => MarketplaceFactory::new()->createOne(),
         ];
     }
