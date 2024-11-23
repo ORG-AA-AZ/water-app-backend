@@ -244,7 +244,6 @@ class MarketplaceControllerTest extends TestCase
             'password' => Str::random(8),
         ];
 
-
         $this->postJson('/api/marketplace/login', $data)
             ->assertStatus(401)
             ->assertJson([

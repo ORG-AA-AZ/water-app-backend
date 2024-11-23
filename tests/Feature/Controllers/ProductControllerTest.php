@@ -3,13 +3,12 @@
 namespace Feature\Controllers;
 
 use App\Models\Product;
-use App\Models\Marketplace;
 use Database\Factories\MarketplaceFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use Faker\Factory;
 use Faker\Generator;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\App;
+use Tests\TestCase;
 
 class ProductControllerTest extends TestCase
 {
