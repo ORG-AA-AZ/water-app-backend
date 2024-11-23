@@ -41,7 +41,6 @@ class MarketplaceControllerTest extends TestCase
     {
         $marketplace = MarketplaceFactory::new()->setInactive()->createOne();
 
-        // Any route needs the marketplace to be active
         $this->actingAs($marketplace)
             ->postJson('api/marketplace/set-location', [])
             ->assertStatus(403)
@@ -244,8 +243,6 @@ class MarketplaceControllerTest extends TestCase
             'national_id' => $marketplace->national_id,
             'password' => Str::random(8),
         ];
-
-        // dd($this->postJson('/api/marketplace/login', $data)->content());
 
         $this->postJson('/api/marketplace/login', $data)
             ->assertStatus(401)
