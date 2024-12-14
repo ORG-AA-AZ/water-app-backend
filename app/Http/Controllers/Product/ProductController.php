@@ -52,17 +52,24 @@ class ProductController
             'price',
             'quantity',
         ]));
-
-        Cache::forget("products_marketplace_{$request->marketplace->id}");
+        
+        Cache::forget("products_marketplace_{$product->marketplace_id}");
 
         return response()->json(['message' => __('messages.update_product_successfully')]);
     }
 
-    public function deleteProduct(UpdateProductRequest $request)
+    public function deleteProduct(string $id)
     {
-        $request->product->delete();
-        Cache::forget("products_marketplace_{$request->product->marketplace_id}");
-
+        $product = Product::where('id', $id)->first();
+    
+        if (! $product) {
+            return response()->json(['message' => __('messages.product_not_found')], 404);
+        }
+    
+        $product->delete();
+    
+        Cache::forget("products_marketplace_{$product->marketplace_id}");
+    
         return response()->json(['message' => __('messages.delete_product_successfully')]);
     }
 }

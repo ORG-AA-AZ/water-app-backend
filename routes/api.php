@@ -46,7 +46,7 @@ Route::middleware(['auth:sanctum', EnsureMarketplaceIsActive::class])->prefix('m
     Route::prefix('products')->group(function () {
         Route::post('add-new-product', [ProductController::class, 'createProduct']);
         Route::patch('update-product', [ProductController::class, 'updateProduct']);
-        Route::delete('delete-product', [ProductController::class, 'deleteProduct']);
+        Route::delete('delete-product/{id}', [ProductController::class, 'deleteProduct']);
     });
 });
 

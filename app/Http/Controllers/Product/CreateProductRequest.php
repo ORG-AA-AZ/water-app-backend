@@ -12,21 +12,20 @@ class CreateProductRequest extends FormRequest
 
     public function authorize(): bool
     {
-        $this->marketplace = Marketplace::where('id', $this->input('id'))?->first();
-
+        $this->marketplace = Marketplace::where('id', $this->input('marketplace_id'))?->first();        
         return $this->user()->can('update', $this->marketplace);
     }
 
     public function rules(): array
     {
         return [
-            'id' => ['required'],
             'name' => ['required', 'string'],
             'brand' => ['required', 'string'],
             'description' => ['required', 'string'],
             'image' => ['required', 'string'],
             'price' => ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
             'quantity' => ['required', 'integer'],
+            'marketplace_id' => ['required'],
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Marketplace;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -33,5 +34,12 @@ class ProductFactory extends Factory
             'brand' => $this->faker->word(),
             'marketplace_id' => MarketplaceFactory::new()->createOne(),
         ];
+    }
+
+    public function forMarketplace(Marketplace $marketplace): static
+    {
+        return $this->state(fn () => [
+            'marketplace_id' => $marketplace->id,
+        ]);
     }
 }
