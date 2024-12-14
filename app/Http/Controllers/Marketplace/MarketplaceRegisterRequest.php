@@ -47,6 +47,7 @@ class MarketplaceRegisterRequest extends FormRequest
         return [
             'mobile.required' => __('messages.required', ['attribute' => $this->attributes()['mobile']]),
             'mobile.regex' => __('messages.regex', ['attribute' => $this->attributes()['mobile']]),
+            'name.required' => __('messages.required', ['attribute' => $this->attributes()['name']]),
             'national_id.required' => __('messages.required', ['attribute' => $this->attributes()['national_id']]),
             'national_id.unique' => __('messages.unique', ['attribute' => $this->attributes()['national_id']]),
             'national_id.regex' => __('messages.unique', ['attribute' => $this->attributes()['national_id']]),
