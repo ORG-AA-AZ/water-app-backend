@@ -19,7 +19,7 @@ class ProductController
                 return Product::where('marketplace_id', $marketplace_id)->get();
             }
         );
-    
+
         return ProductResponse::collection($products);
     }
 
@@ -43,16 +43,16 @@ class ProductController
     public function updateProduct(UpdateProductRequest $request)
     {
         $product = $request->product;
-    
+
         $product->update($request->only([
-            'name', 
-            'brand', 
-            'description', 
-            'image', 
-            'price', 
-            'quantity'
+            'name',
+            'brand',
+            'description',
+            'image',
+            'price',
+            'quantity',
         ]));
-        
+
         Cache::forget("products_marketplace_{$request->marketplace->id}");
 
         return response()->json(['message' => __('messages.update_product_successfully')]);

@@ -9,7 +9,7 @@ class GetAllProductsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'marketplace_id' => ['required', 'string', 'exists:marketplaces,id']
+            'marketplace_id' => ['required', 'string', 'exists:marketplaces,id'],
         ];
     }
 }

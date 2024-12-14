@@ -14,7 +14,7 @@ class UpdateProductRequest extends FormRequest
     {
         $this->product = Product::find($this->input('id'));
 
-        return $this->product 
+        return $this->product
             && $this->product->marketplace_id === $this->user()->id
             && $this->user()->can('update', $this->product);
     }
