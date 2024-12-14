@@ -52,7 +52,7 @@ class ProductController
             'price',
             'quantity',
         ]));
-        
+
         Cache::forget("products_marketplace_{$product->marketplace_id}");
 
         return response()->json(['message' => __('messages.update_product_successfully')]);
@@ -61,15 +61,15 @@ class ProductController
     public function deleteProduct(string $id)
     {
         $product = Product::where('id', $id)->first();
-    
+
         if (! $product) {
             return response()->json(['message' => __('messages.product_not_found')], 404);
         }
-    
+
         $product->delete();
-    
+
         Cache::forget("products_marketplace_{$product->marketplace_id}");
-    
+
         return response()->json(['message' => __('messages.delete_product_successfully')]);
     }
 }

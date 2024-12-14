@@ -12,7 +12,8 @@ class CreateProductRequest extends FormRequest
 
     public function authorize(): bool
     {
-        $this->marketplace = Marketplace::where('id', $this->input('marketplace_id'))?->first();        
+        $this->marketplace = Marketplace::where('id', $this->input('marketplace_id'))?->first();
+
         return $this->user()->can('update', $this->marketplace);
     }
 

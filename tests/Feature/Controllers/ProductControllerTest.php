@@ -133,7 +133,7 @@ class ProductControllerTest extends TestCase
         $this->faker = Factory::create();
         $marketplace = MarketplaceFactory::new()->createOne();
         $product = ProductFactory::new()->forMarketplace($marketplace)->createOne();
-        
+
         $this->assertDatabaseCount('products', 1);
 
         $this->actingAs($marketplace)
@@ -151,7 +151,7 @@ class ProductControllerTest extends TestCase
         $this->faker = Factory::create();
         $marketplace = MarketplaceFactory::new()->createOne();
         ProductFactory::new()->forMarketplace($marketplace)->createOne();
-        
+
         $this->assertDatabaseCount('products', 1);
 
         $this->actingAs($marketplace)
